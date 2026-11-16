@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fcee0a"><link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon.svg"><title>NIGHT CITY FEED</title>
+<style>
+:root{--y:#fcee0a;--bg:#0b0b0b;--p:#151515;--t:#e8e8e8;--m:#8a8a8a;--c:#00f0ff}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:15px/1.4 "Rajdhani","Segoe UI",Arial,sans-serif;padding:env(safe-area-inset-top) 0 80px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:2px solid var(--y);padding:10px 14px}
+h1{margin:0;font-size:22px;letter-spacing:3px;color:var(--y);text-transform:uppercase}h1 small{display:block;font-size:11px;color:var(--m);letter-spacing:2px}
+.tabs{display:flex;gap:6px;overflow-x:auto;padding-top:8px}.tabs button{flex:none;background:none;border:1px solid var(--m);color:var(--t);padding:5px 10px;text-transform:uppercase;letter-spacing:1px;font:inherit;font-size:12px}
+.tabs button.on{background:var(--y);color:#000;border-color:var(--y);font-weight:700}
+main{padding:12px 14px}.card{display:flex;gap:10px;align-items:stretch;background:var(--p);border-left:4px solid var(--y);padding:12px;margin-bottom:10px;text-decoration:none;color:inherit}
+.th{flex:none;width:84px;min-height:84px;background:#000 repeating-linear-gradient(45deg,#1c1c00 0 6px,#000 6px 12px);border:1px solid #333;overflow:hidden}.th img{width:100%;height:100%;object-fit:cover;display:block}.bd{min-width:0;flex:1}.card h3{margin:0 0 6px;font-size:15px;line-height:1.25}.meta{font-size:12px;color:var(--m)}.go{color:var(--c);font-size:12px;letter-spacing:1px}
+#st{color:var(--m);text-align:center;padding:20px}
+#ad{position:fixed;right:0;top:38%;width:150px;background:#000;border:2px solid var(--y);border-right:0;padding:8px;z-index:8;transform:translateX(105%);transition:transform .5s;font-size:12px}
+#ad.show{transform:none}#ad b{display:block;color:var(--y);font-size:15px;letter-spacing:1px}#ad i{color:var(--m);font-size:10px;font-style:normal}
+#fab{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:9;background:var(--y);color:#000;border:0;padding:12px 16px;font:700 14px sans-serif;letter-spacing:2px;display:none}
+#chat{position:fixed;inset:0;background:var(--bg);z-index:20;display:none;flex-direction:column;padding-top:env(safe-area-inset-top)}#chat.open{display:flex}
+#ch{display:flex;justify-content:space-between;padding:10px 14px;border-bottom:2px solid var(--y);color:var(--y);letter-spacing:2px}#ch button{background:none;border:1px solid var(--y);color:var(--y)}
+#log{flex:1;overflow-y:auto;padding:12px}.msg{max-width:85%;margin:0 0 12px;padding:8px 10px;white-space:pre-wrap}
+.ai{background:#1a1800;border-left:3px solid var(--y)}.me{margin-left:auto;background:#001a1c;border-right:3px solid var(--c);text-align:right}
+#f{display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom))}#f input{flex:1;background:var(--p);border:1px solid var(--m);color:var(--t);padding:10px;min-width:0}#f button{background:var(--y);border:0;padding:0 16px;font-weight:700}
+</style></head><body>
+<header><h1>Night City Feed<small>// FLUX EN DIRECT</small></h1><div class="tabs" id="tabs"></div></header>
+<main><div id="st">Connexion au réseau…</div><div id="list"></div></main>
+<aside id="ad"><b id="adt"></b><span id="adb"></span><br><i>PUBLICITÉ</i></aside>
+<button id="fab">▸ COMLINK</button>
+<section id="chat"><div id="ch"><span>// COMLINK</span><button id="close">FERMER</button></div><div id="log"></div>
+<form id="f"><input id="in" placeholder="Écris ton message…" autocomplete="off"><button>ENVOYER</button></form></section>
+<script>
+// >>> METS ICI L'ADRESSE DE TON WORKER (voir LISEZMOI) <<<
+const API="https://nc-feed.lucasfigeac140702.workers.dev";
+const CHAT=false; // passe à true si tu as ajouté ANTHROPIC_API_KEY au Worker
+const $=id=>document.getElementById(id);
+const tabs=["tout","jeu","série","tcg","univers","dérivés"];let cat="tout";
+function tabsUI(){$("tabs").innerHTML=tabs.map(t=>`<button class="${t==cat?"on":""}" data-t="${t}">${t}</button>`).join("")}
+$("tabs").onclick=e=>{if(e.target.dataset.t){cat=e.target.dataset.t;tabsUI();load()}};
+async function load(){
+  $("list").innerHTML="";$("st").textContent="Téléchargement du flux…";
+  try{const r=await fetch(API+"/news?cat="+encodeURIComponent(cat));if(!r.ok)throw new Error("HTTP "+r.status);const d=await r.json();if(!Array.isArray(d))throw new Error("Réponse inattendue");
+    $("st").textContent=d.length?"":"Rien de neuf dans cet onglet pour l'instant. Repasse plus tard.";
+    const L=$("list");
+    d.forEach(n=>{const a=document.createElement("a");a.className="card";a.href=n.link;a.target="_blank";a.rel="noopener";
+      const th=document.createElement("div");th.className="th";
+      if(n.image){const im=document.createElement("img");im.loading="lazy";im.referrerPolicy="no-referrer";im.alt="";im.src=n.image;im.onerror=()=>im.remove();th.append(im)}
+      const bd=document.createElement("div");bd.className="bd";
+      const h=document.createElement("h3");h.textContent=n.title;
+      const m=document.createElement("div");m.className="meta";
+      m.textContent=(n.source||"")+(n.date?" · "+new Date(n.date).toLocaleString("fr-FR",{dateStyle:"short",timeStyle:"short"}):"");
+      const g=document.createElement("span");g.className="go";g.textContent="ACCÉDER ▸";
+      bd.append(h,m,g);a.append(th,bd);L.append(a)});
+  }catch(e){$("st").textContent="Signal perdu : "+(e&&e.message?e.message:e)+" | API = "+API}}
+tabsUI();load();setInterval(load,600000);
+const ADS=[["ARASAKA","Votre avenir, sécurisé."],["MILITECH","Le calibre de la liberté."],["TRAUMA TEAM","On arrive avant la mort."],["KANG TAO","Des armes intelligentes."],["DELAMAIN","Taxi 100 % IA."],["BIOTECHNICA","Nourrir demain, aujourd'hui."]];
+let ai=0;function ad(){const a=ADS[ai++%ADS.length];$("adt").textContent=a[0];$("adb").textContent=a[1];$("ad").classList.add("show");setTimeout(()=>$("ad").classList.remove("show"),6000)}
+setTimeout(ad,3000);setInterval(ad,20000);
+if(CHAT){$("fab").style.display="block";const hist=[];
+  const add=(w,t)=>{const d=document.createElement("div");d.className="msg "+w;d.textContent=t;$("log").append(d);$("log").scrollTop=1e9;return d};
+  $("fab").onclick=()=>{$("chat").classList.add("open");if(!$("log").children.length)add("ai","Connexion établie. Que cherches-tu, choom ?")};
+  $("close").onclick=()=>$("chat").classList.remove("open");
+  $("f").onsubmit=async e=>{e.preventDefault();const t=$("in").value.trim();if(!t)return;$("in").value="";add("me",t);hist.push({role:"user",content:t});
+    const o=add("ai","…");try{const r=await fetch(API+"/chat",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({messages:hist})});
+      const d=await r.json();o.textContent=d.text||"Signal perdu.";hist.push({role:"assistant",content:d.text})}catch{o.textContent="Signal perdu.";hist.pop()}}}
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js");
+</script></body></html>
