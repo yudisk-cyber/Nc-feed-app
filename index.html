@@ -85,7 +85,7 @@ main{padding:12px 12px 12px calc(var(--rail) + 12px)}
 .big{font-size:40px;line-height:1.1;color:var(--y);letter-spacing:2px;font-weight:700}
 .row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:6px 0;border-top:1px solid #262626}
 .row:first-of-type{border-top:0}
-.row a{color:inherit;text-decoration:none}
+.row a,a.row{color:inherit;text-decoration:none}
 .px{color:var(--y);font-weight:700;white-space:nowrap}
 .px s{color:var(--m);font-weight:400;margin-right:6px}
 .off{color:#000;background:var(--c);padding:0 5px;font-size:11px;font-weight:700;margin-left:6px}
@@ -133,6 +133,54 @@ main{padding:12px 12px 12px calc(var(--rail) + 12px)}
 #log{flex:1;overflow-y:auto;padding:12px}.msg{max-width:85%;margin:0 0 12px;padding:8px 10px;white-space:pre-wrap}
 .ai{background:#1a1800;border-left:3px solid var(--y)}.me{margin-left:auto;background:#001a1c;border-right:3px solid var(--c);text-align:right}
 #f{display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom))}#f input{flex:1;background:var(--p);border:1px solid var(--m);color:var(--t);padding:10px;min-width:0}#f button{background:var(--y);border:0;padding:0 16px;font-weight:700}
+
+/* vidéos en liste compacte */
+.vc{display:flex;gap:10px;padding:8px 46px 8px 8px;margin-bottom:8px}
+.vc a{display:flex;gap:10px;min-width:0;flex:1}
+.vt{flex:none;width:132px;aspect-ratio:16/9}
+.vt::after{font-size:22px;background:linear-gradient(transparent 55%,rgba(0,0,0,.5))}
+.vb{padding:0;flex:1;min-width:0;gap:2px}
+.vb h3{margin:0;font-size:14px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.vc .star{top:0;bottom:auto;height:42px}
+/* steam / twitch */
+.btnrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.btn2{display:inline-block;text-decoration:none;background:none;border:1px solid var(--y);color:var(--y);padding:6px 11px;font:inherit;font-size:12px;letter-spacing:1px;text-transform:uppercase}
+.btn2.tw{border-color:#9146ff;color:#c9a8ff}
+.btn2:active{background:var(--y);color:#000}
+.pxl{display:flex;flex-direction:column;align-items:flex-end;gap:5px}
+.tv{width:100%;aspect-ratio:16/9;border:0;margin-top:10px;background:#000}
+/* TCG */
+details.rule{background:var(--p);border-left:4px solid var(--y);margin-bottom:8px}
+details.rule summary{padding:11px 12px;cursor:pointer;font-weight:700;letter-spacing:1px;text-transform:uppercase;font-size:13px;list-style:none}
+details.rule summary::-webkit-details-marker{display:none}
+details.rule summary::after{content:"＋";float:right;color:var(--y)}
+details.rule[open] summary::after{content:"－"}
+details.rule .rb{padding:0 12px 12px;font-size:14px;color:#cfcfcf}
+details.rule p{margin:0 0 8px}
+details.rule ul,details.rule ol{margin:0 0 8px;padding-left:20px}
+details.rule li{margin-bottom:4px}
+.kw{color:var(--c);font-weight:700}
+.dot{display:inline-block;width:11px;height:11px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.cr{background:#e0314b}.cy{background:#fcee0a}.cg{background:#2bd96b}.cb{background:#2f9bff}
+.ctl{background:var(--p);border-left:4px solid var(--c);padding:10px;margin-bottom:10px}
+.ctl input[type=search]{width:100%;background:#0b0b0b;border:1px solid #444;color:var(--t);padding:7px 9px;font:inherit;margin-bottom:8px}
+.fl{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:7px}
+.fl>span{font-size:10px;letter-spacing:1px;color:var(--m);text-transform:uppercase;width:58px;flex:none}
+.fl label{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--m);text-transform:uppercase;letter-spacing:1px}
+.fc{background:none;border:1px solid #555;color:var(--t);padding:3px 8px;font:inherit;font-size:12px}
+.fc.on{background:var(--y);border-color:var(--y);color:#000;font-weight:700}
+.ctl select{background:#0b0b0b;color:var(--t);border:1px solid #555;padding:4px 6px;font:inherit;font-size:13px}
+.cnt{color:var(--m);font-size:12px;margin:4px 0 8px}
+.gh{grid-column:1/-1;color:var(--y);letter-spacing:2px;font-size:12px;text-transform:uppercase;border-bottom:1px solid #333;padding:6px 0 3px;margin-top:6px}
+#cg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+@media(max-width:340px){#cg{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:620px){#cg{grid-template-columns:repeat(5,1fr)}}
+.cd{position:relative;aspect-ratio:5/7;background:#000;border:1px solid #333;overflow:hidden;cursor:pointer;padding:0;color:inherit}
+.cd img{width:100%;height:100%;object-fit:cover;display:block}
+.cd .ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;font-size:11px;font-weight:700}
+.cd .bar{position:absolute;left:0;right:0;bottom:0;height:4px}
+.cd .no{position:absolute;top:2px;left:3px;font-size:9px;background:rgba(0,0,0,.7);padding:0 3px;color:var(--y)}
+.cd .co{position:absolute;top:2px;right:3px;font-size:10px;font-weight:700;background:rgba(0,0,0,.75);color:#fff;padding:0 4px}
 </style></head><body>
 <header id="hd">
  <div class="top"><h1>Night City Feed<small>// CYBERPUNK 2077 · EN DIRECT</small></h1>
@@ -157,8 +205,11 @@ const $=id=>document.getElementById(id);
 const ADS=window.ADS||[];
 const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"]];
 const NEWSCATS=["tout","jeu","série","tcg","univers","dérivés"];
-const NAV=[["actus","▤","Actus"],["vid","▶","Vidéos"],["live","●","Live"],["cal","◷","Sorties"],["quiz","?","Quiz"]];
-const inNews=()=>NEWSCATS.includes(cat);let lastNews="tout";
+const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"]],plus:[["cal","Sorties"],["quiz","Quiz"]]};
+const NAV=[["actus","▤","Actus"],["vid","▶","Vidéos"],["live","●","Live"],["tcg","◈","TCG"],["plus","⋯","Plus"]];
+const LAST={actus:"tout",tcg:"tr",plus:"cal"};
+function secOf(c){for(const s in SEC)if(SEC[s].some(x=>x[0]==c))return s;return c}
+const inNews=()=>NEWSCATS.includes(cat);
 const LABEL={"jeu":"Jeu","série":"Série & film","tcg":"TCG & jeux de table","univers":"Univers","dérivés":"Produits dérivés","vidéo":"Vidéo"};
 let cat="tout",DATA=[],VIDS=[],Q="",NEWSET=new Set();
 function hh(){document.documentElement.style.setProperty("--hh",$("hd").offsetHeight+"px")}
@@ -185,27 +236,29 @@ async function share(n){
 }
 /* onglets */
 function go(k){
-  if(k=="actus")k=lastNews;
+  if(SEC[k])k=LAST[k];
   if(cat==k)return;
-  cat=k;if(NEWSCATS.includes(k))lastNews=k;Q="";$("q").value="";tabsUI();draw();glitch();scrollTo(0,0);
-  if(k=="live"&&Date.now()-statsT>3e4){statsT=Date.now();loadStats()}
+  cat=k;const s=secOf(k);if(LAST[s]!==undefined)LAST[s]=k;
+  Q="";$("q").value="";tabsUI();draw();glitch();scrollTo(0,0);
+  if(k=="live"){if(Date.now()-statsT>3e4){statsT=Date.now();loadStats()}}
   if(k=="vid"&&!VIDS.length)loadVids(true);
 }
 function glitch(){const L=$("list");L.classList.remove("gl");void L.offsetWidth;L.classList.add("gl")}
 function tabsUI(){
-  const T=$("tabs");
-  if(!T.children.length){
-    NEWSCATS.forEach(k=>{const b=el("button",null);b.dataset.k=k;b.append(document.createTextNode(k),el("b"));b.onclick=()=>go(k);T.append(b)});
+  const T=$("tabs"),sec=secOf(cat),sub=SEC[sec];
+  if(!$("nav").children.length){
     NAV.forEach(([k,ic,l])=>{const b=el("button",null);b.dataset.k=k;b.append(el("i",null,ic),document.createTextNode(l),el("b"));b.onclick=()=>go(k);$("nav").append(b)});
-    $("fv").onclick=()=>go(cat=="fav"?lastNews:"fav");
+    $("fv").onclick=()=>go(cat=="fav"?LAST.actus:"fav");
   }
-  const F=favs();
-  T.style.display=inNews()?"flex":"none";
+  const key=sec+"|"+(sub?"1":"0");
+  if(T.dataset.key!=key){T.dataset.key=key;T.innerHTML="";
+    if(sub)sub.forEach(([k,l])=>{const b=el("button",null);b.dataset.k=k;b.append(document.createTextNode(l),el("b"));b.onclick=()=>go(k);T.append(b)})}
+  T.style.display=sub?"flex":"none";
   T.querySelectorAll("button").forEach(b=>{const k=b.dataset.k;b.classList.toggle("on",k==cat);
-    const n=k=="tout"?DATA.length:DATA.filter(a=>a.cat==k).length;b.lastChild.textContent=n||""});
+    const n=sec!="actus"?0:k=="tout"?DATA.length:DATA.filter(a=>a.cat==k).length;b.lastChild.textContent=n||""});
   $("nav").querySelectorAll("button").forEach(b=>{const k=b.dataset.k;
-    b.classList.toggle("on",k=="actus"?inNews():k==cat);
-    b.lastChild.textContent=k=="vid"?(VIDS.length||""):""});
+    b.classList.toggle("on",k==sec);b.lastChild.textContent=k=="vid"?(VIDS.length||""):""});
+  const F=favs();
   $("fv").classList.toggle("on",cat=="fav");$("fv").textContent=F.length?"★":"☆";
   document.documentElement.style.setProperty("--nh",$("nav").offsetHeight+"px");
   hh();
@@ -315,22 +368,48 @@ async function loadStats(){
   try{const r=await fetch(API+"/stats",{cache:"no-cache"});if(!r.ok)throw 0;STATS=await r.json()}catch(e){STATS=STATS||{error:1}}
   if(cat=="live")draw();
 }
+const STEAM={"1091500":"Cyberpunk 2077","2138330":"Phantom Liberty"};
+const steamUrl=id=>"https://store.steampowered.com/app/"+id+"/";
 function drawLive(L){
   $("st").textContent="";
-  if(!STATS){L.append(el("div","none","Connexion aux serveurs Steam…"));return}
-  if(STATS.error&&!STATS.players){L.append(el("div","none","Données live indisponibles pour l'instant."));return}
-  const p=el("div","panel");p.append(el("div","lab","Joueurs en ligne maintenant (Steam)"),el("div","big",STATS.players!=null?Number(STATS.players).toLocaleString("fr-FR"):"—"));
-  p.append(el("div","meta","Cyberpunk 2077 · mis à jour "+(STATS.updated?new Date(STATS.updated).toLocaleTimeString("fr-FR",{timeStyle:"short"}):"")));L.append(p);
-  L.append(el("div","sh","Prix sur Steam (France)"));
-  const pp=el("div","panel");
-  (STATS.prices||[]).forEach(x=>{const r=el("div","row");r.append(el("span",null,x.name));
-    const v=el("span","px");if(x.discount>0){v.append(el("s",null,x.initial),document.createTextNode(x.final),el("span","off","-"+x.discount+"%"))}else v.textContent=x.final;r.append(v);pp.append(r)});
-  if(!(STATS.prices||[]).length)pp.append(el("div","none","Prix indisponibles."));L.append(pp);
-  L.append(el("div","sh","Meilleures promos (prix en USD)"));
-  const dp=el("div","panel");
-  (STATS.deals||[]).forEach(x=>{const r=el("a","row");r.href=x.url;r.target="_blank";r.rel="noopener";r.append(el("span",null,x.title+" · "+x.store));
-    const v=el("span","px");v.append(el("s",null,"$"+x.normal),document.createTextNode("$"+x.price),el("span","off","-"+Math.round(x.savings)+"%"));r.append(v);dp.append(r)});
-  if(!(STATS.deals||[]).length)dp.append(el("div","none","Aucune promo trouvée."));L.append(dp);
+  L.append(el("div","sh","Steam"));
+  if(!STATS)L.append(el("div","none","Connexion aux serveurs Steam…"));
+  else if(STATS.error&&!STATS.players)L.append(el("div","none","Données Steam indisponibles pour l'instant."));
+  else{
+    const p=el("div","panel");p.append(el("div","lab","Joueurs en ligne maintenant"),el("div","big",STATS.players!=null?Number(STATS.players).toLocaleString("fr-FR"):"—"));
+    p.append(el("div","meta","Cyberpunk 2077 · mis à jour "+(STATS.updated?new Date(STATS.updated).toLocaleTimeString("fr-FR",{timeStyle:"short"}):"")));L.append(p);
+    L.append(el("div","sh","Prix sur Steam (France)"));
+    const pp=el("div","panel");
+    (STATS.prices||[]).forEach((x,i)=>{
+      const id=x.id||(/phantom/i.test(x.name)?"2138330":"1091500");
+      const r=el("div","row");r.append(el("span",null,x.name));
+      const w=el("div","pxl"),v=el("span","px");
+      if(x.discount>0){v.append(el("s",null,x.initial),document.createTextNode(x.final),el("span","off","-"+x.discount+"%"))}else v.textContent=x.final;
+      w.append(v,chip("Magasin Steam ▸",steamUrl(id)));r.append(w);pp.append(r)});
+    if(!(STATS.prices||[]).length)pp.append(el("div","none","Prix indisponibles."));
+    L.append(pp);
+    L.append(el("div","sh","Meilleures promos (prix en USD)"));
+    const dp=el("div","panel");
+    (STATS.deals||[]).forEach(x=>{const r=el("a","row");r.href=x.url;r.target="_blank";r.rel="noopener";r.append(el("span",null,x.title+" · "+x.store));
+      const v=el("span","px");v.append(el("s",null,"$"+x.normal),document.createTextNode("$"+x.price),el("span","off","-"+Math.round(x.savings)+"%"));r.append(v);dp.append(r)});
+    if(!(STATS.deals||[]).length)dp.append(el("div","none","Aucune promo trouvée."));L.append(dp);
+  }
+  const bt=el("div","btnrow");
+  Object.keys(STEAM).forEach(id=>{const a=el("a","btn2","Steam · "+STEAM[id]);a.href=steamUrl(id);a.target="_blank";a.rel="noopener";bt.append(a)});
+  L.append(bt);
+  /* Twitch */
+  L.append(el("div","sh","Twitch"));
+  const tp=el("div","panel");tp.style.borderLeftColor="#9146ff";
+  tp.append(el("div","lab","Streams Cyberpunk 2077"),el("p","meta","Les lives en cours, classés par spectateurs, sur la page officielle de la catégorie."));
+  const tb=el("div","btnrow");
+  [["Catégorie Cyberpunk 2077","https://www.twitch.tv/directory/category/cyberpunk-2077"],["CD PROJEKT RED","https://www.twitch.tv/cdprojektred"],["Rechercher « Cyberpunk »","https://www.twitch.tv/search?term=cyberpunk"]].forEach(([n,u])=>{const a=el("a","btn2 tw",n);a.href=u;a.target="_blank";a.rel="noopener";tb.append(a)});
+  tp.append(tb);
+  if(/^https?:$/.test(location.protocol)){
+    const w=el("button","btn2 tw","▶ Regarder CD PROJEKT RED ici");w.style.marginTop="8px";
+    w.onclick=()=>{const f=el("iframe","tv");f.src="https://player.twitch.tv/?channel=cdprojektred&parent="+location.hostname+"&muted=true&autoplay=false";f.allowFullscreen=true;w.replaceWith(f)};
+    tp.append(w);tp.append(el("p","note","Le lecteur n'affiche une image que si la chaîne est en direct."));
+  }
+  L.append(tp);
 }
 /* vidéos */
 function videoCard(n){
@@ -353,6 +432,88 @@ async function loadVids(force){
   vidTry=true;tabsUI();if(cat=="vid")draw();
 }
 const YT=[["CD PROJEKT RED","https://www.youtube.com/@CDPROJEKTRED"],["Cyberpunk 2077","https://www.youtube.com/@cyberpunkgame"],["Netflix Anime","https://www.youtube.com/@NetflixAnime"]];
+/* TCG : règles + liste des cartes */
+const RULES=[
+ ["But du jeu",`<p>Tu gagnes si tu commences ton tour avec <b>7 Gigs</b> (dés) dans ta zone de Gigs. Tu ne gagnes pas à l'instant où tu prends le 7ᵉ : il faut le garder jusqu'au début de ton tour suivant.</p><p>Tu perds si tu dois piocher et que ton deck est vide.</p>`],
+ ["Ce qu'il te faut",`<ul><li>Un <b>deck de 40 à 50 cartes</b> (maximum 3 exemplaires du même nom et sous-titre).</li><li><b>3 Légendes</b> de noms différents, gardées hors du deck.</li><li>Six dés : d4, d6, d8, d10, d12 et d20, rangés dans ta zone <span class="kw">Fixer</span>.</li><li>Des cartes de <b>4 couleurs</b> : <span class="dot cr"></span>rouge, <span class="dot cy"></span>jaune, <span class="dot cg"></span>vert, <span class="dot cb"></span>bleu. La <span class="kw">RAM</span> de tes Légendes limite les couleurs que ton deck peut jouer.</li></ul><p>Format « Beta Sealed » (partie avec boosters) : 30 cartes minimum, 3 couleurs maximum, sans contrainte de RAM.</p>`],
+ ["Les types de cartes",`<ul><li><b>Légende</b> : ton chef d'équipe. Face cachée au départ, tu la révèles en payant 1 €$ (« appeler »). Elle peut aussi servir à payer un coût.</li><li><b>Unité</b> : un personnage qui entre sur le terrain, attaque et bloque.</li><li><b>Équipement (Gear)</b> : tu paies son coût pour l'attacher à une de tes Unités ou à une Légende révélée.</li><li><b>Programme</b> : tu paies son coût, l'effet se résout, puis la carte va à la défausse.</li></ul><p>Le coût est en €$ (eddies), en haut à gauche de la carte.</p>`],
+ ["Mise en place",`<ol><li>Chacun mélange son deck. Un tirage au sort désigne qui choisit le premier joueur.</li><li>Place tes 3 Légendes face cachée, dans un ordre aléatoire.</li><li>Le premier joueur dépense ses deux Légendes les plus à gauche : elles ne se redressent pas à son premier tour.</li><li>Pioche 6 cartes. Tu as droit à <b>un seul mulligan</b> : tu remets ta main, tu mélanges et tu repioches 6.</li></ol>`],
+ ["Déroulement d'un tour",`<p><b>1. Début de tour</b></p><ul><li>Vérifie la condition de victoire (7 Gigs).</li><li>Redresse tes cartes dépensées, pioche 1 carte.</li><li>Lance un dé de ta zone Fixer : il rejoint ta zone de Gigs. Le d20 ne peut être pris que s'il ne reste aucun autre dé.</li></ul><p><b>2. Phase principale</b> (dans l'ordre que tu veux)</p><ul><li><b>Vendre une carte</b> (une fois par tour) pour gagner un eddie.</li><li><b>Appeler une Légende</b> (une fois par tour, 1 €$).</li><li>Jouer des Unités, Équipements et Programmes en payant leur coût.</li><li>Activer des effets, <b>attaquer</b> avec tes Unités prêtes.</li></ul><p><b>3. Fin de tour</b> : toutes les Unités perdent <span class="kw">Lag</span>.</p>`],
+ ["Combat et vol de Gigs",`<ul><li>Une Unité <b>prête</b> peut s'épuiser pour attaquer : soit une Unité adverse épuisée (un combat), soit la <b>zone de Gigs</b> adverse.</li><li>Avant la résolution, l'adversaire a une fenêtre de réaction : effets <span class="kw">Quick</span>, Unités <span class="kw">Blocker</span> qui reprennent l'attaque, appel d'une Légende.</li><li>Un combat compare les <b>Puissances</b> des Unités.</li><li>Si l'attaque touche les Gigs, tu <b>voles</b> des dés à l'adversaire : ils passent dans ta zone.</li><li><b>Street Cred</b> = total des faces de tes dés. Chaque dé compte pour 1 Gig, quelle que soit sa valeur ; la valeur compte pour la Street Cred et certains effets.</li></ul>`],
+ ["Mots-clés",`<ul><li><span class="kw">Lag</span> : une Unité qui vient d'arriver ne peut pas attaquer ni payer un coût qui l'épuise. Elle perd Lag à la fin du tour.</li><li><span class="kw">Adrenaline</span> (Go Solo) : l'Unité peut attaquer dès le tour où elle est jouée.</li><li><span class="kw">Blocker</span> : l'attaque adverse peut être redirigée vers cette Unité.</li><li><span class="kw">Quick</span> : effet jouable pendant la fenêtre de réaction.</li></ul>`],
+ ["Rareté des cartes",`<ul><li>Commune, Peu commune, Rare, Épique, Secrète.</li><li><b>Iconique</b> : versions alternatives de certaines cartes (Légendes, cartes clés, et quelques Secrètes).</li></ul><p>Utilise l'onglet « Cartes » pour trier et filtrer toute la liste.</p>`],
+ ["Pour aller plus loin",`<p>Ce résumé est <b>non officiel</b> et simplifié, basé sur des guides de la communauté ; les règles ont évolué entre la bêta et la sortie en boutique. En cas de doute, la référence est le livret de règles officiel.</p><div class="chips"><a class="chip" target="_blank" rel="noopener" href="https://cyberpunktcg.com/">Site officiel</a><a class="chip" target="_blank" rel="noopener" href="https://cyberpunktcg.wiki/rules/">Guide des règles</a><a class="chip" target="_blank" rel="noopener" href="https://anketsu.com/cyberpunk-tcg-rules/">Guide débutant</a></div>`]
+];
+function drawRules(L){
+  $("st").textContent="";
+  L.append(el("p","note","Tutoriel express du Cyberpunk TCG — touche une section pour la déplier."));
+  RULES.forEach(([t,html],i)=>{const d=el("details","rule");if(i==0)d.open=true;const s=el("summary",null,t);const b=el("div","rb");b.innerHTML=html;d.append(s,b);L.append(d)});
+}
+const CARDS=[["001","Adam Smasher: Ender of Legends","r","e","l",9],["002","Dexter DeShawn: Off the Grid","r","r","l",null],["003","Johnny Silverhand: Rocking Renegade","r","s","l",null],["004","Royce: Psycho on the Edge","r","r","l",6],["005a","V: Streetkid (art masculin)","r","r","l",5],["005b","V: Streetkid (art féminin)","r","r","l",5],["006","6th Street Recruits","r","c","u",4],["007","Animals Wrecker","r","c","u",6],["008","Chrome Fang","r","c","u",5],["009","El Sombrerón: La Venganza Lenta","r","r","u",5],["010","Japantown Jonin","r","c","u",2],["011","Johnny Silverhand: Never Stop Fighting","r","e","u",6],["012","Kerry Eurodyne: The Last Rockerboy","r","u","u",4],["013","La Llorona: Ghost of the Past","r","u","u",3],["014","Meredith Stout: Stone Cold Corpo","r","r","u",4],["015","Octant","r","c","u",7],["016","Royce: Don't Call Me Simon","r","u","u",5],["017","Ruthless Lowlife","r","c","u",2],["018","Screw: Lovelorn Fool","r","c","u",5],["019","Swordwise Huscle","r","c","u",3],["020","V: Roamer of the Badlands","r","e","u",5],["021","Valentino Guerrera","r","c","u",3],["022","Yorinobu Arasaka: Steel Dragon","r","r","u",7],["023","Arasaka Emergency Radioport","r","c","g",2],["024","Deadman Transmitter","r","u","g",3],["025","Mantis Blades","r","c","g",1],["026","Satori: Sword of Saburo","r","u","g",2],["027","All is Lost","r","c","p",1],["028","Appetite for Destruction","r","u","p",3],["029","Bonnie and Clyde","r","u","p",3],["030","Carnage at the Colosseum","r","c","p",6],["031","Detonate","r","c","p",1],["032","Gunpoint Diplomacy","r","u","p",4],["033","Industrial Assembly","r","u","p",1],["034","Over the Edge","r","c","p",3],["035","Shattered Memories","r","r","p",4],["036","Dum Dum: Maelstrom Triggerman","y","r","l",null],["037","Kerry Eurodyne: Axe, Attitude, Audience","y","r","l",null],["038","Muamar Reyes: El Capitán","y","r","l",null],["039","River Ward: Detective on the Hunt","y","r","l",null],["040","Rogue Amendiares: Preem Solo","y","r","l",7],["041","Adam Smasher: Metal Over Meat","y","e","u",9],["042","Alt Cunningham: Mother of Daemons","y","r","u",7],["043","Augmented Negotiators","y","c","u",3],["044","Caliber: Totentanz's Top Dog","y","r","u",5],["045","Gilded Matón","y","c","u",4],["046","Hanako Arasaka: In a Gilded Cage","y","r","u",4],["047","Heywood Ripperdoc","y","u","u",6],["048","Jackie Welles: Ride or Die Choom","y","e","u",6],["049","Maelstrom Goons","y","c","u",3],["050","MaxTac Suppression Team","y","c","u",5],["051","Offduty Malfini","y","c","u",4],["052","Rockn' Rockerboy","y","c","u",5],["053","Secondhand Bombus","y","c","u",2],["054","Sketchy Ripper","y","c","u",2],["055","T-Bug: Amateur Philosopher","y","u","u",4],["056","Trauma Team Operatives","y","c","u",6],["057","Viktor Vektor: Drop Your Illusions","y","e","u",5],["058","Viktor Vektor: You Might Feel a Little Pinch","y","u","u",3],["059","Adrenaline Converter","y","c","g",2],["060","Gorilla Arms","y","c","g",4],["061","Kiroshi Optics","y","c","g",1],["062","Mandibular Upgrade","y","c","g",1],["063","The Relic: Experimental Biochip","y","e","g",5],["064","Zetatech Faceplate","y","u","g",2],["065","Afterparty at Lizzie's","y","c","p",1],["066","Bootleg Black Sapphire Show","y","u","p",5],["067","Cyberpsychosis","y","u","p",3],["068","Live with the Aftermath","y","c","p",3],["069","Safety Override","y","c","p",2],["070","The Heist","y","u","p",2],["071","Goro Takemura: Vengeful Bodyguard","g","r","l",null],["072","Hanako Arasaka: Daughter of the Emperor","g","r","l",null],["073","Jackie Welles: Mama's Favorite","g","r","l",6],["074","Padre: Man of the Cross","g","r","l",null],["075","Panam Palmer: Nomad Cavalry","g","e","l",null],["076","Corpo Security","g","c","u",2],["077","Emergency Atlus","g","c","u",3],["078","Field Operator","g","c","u",3],["079","Maelstrom Zealots","g","c","u",4],["080","MaxTac AV","g","c","u",5],["081","MaxTac Heavy","g","u","u",7],["082","MaxTac Squadron","g","c","u",3],["083","Nadia: Fighting Through Grief","g","u","u",6],["084","Pacifica Netrunner","g","c","u",4],["085","Panam Palmer: Strength Through Family","g","s","u",6],["086","Pepe Najarro: Working Doubles","g","u","u",4],["087","Riding Nomad","g","c","u",5],["088","Sandayu Oda: Hanako's Guardian","g","r","u",7],["089","Saul Bright: Stormrider","g","r","u",8],["090","Tyger's Whisper","g","c","u",2],["091","Valentino Street Racer","g","c","u",3],["092","Wraith Marauders","g","u","u",5],["093","Overwatch: Panam's Gift","g","e","g",4],["094","Riot Shield","g","u","g",2],["095","Sandevistan","g","u","g",3],["096","Zetatech Berserk","g","c","g",6],["097","Corporate Surveillance","g","u","p",2],["098","(Don't Fear) The Reaper","g","r","p",7],["099","Fool on the Hill","g","r","p",2],["100","Memory Relapse","g","u","p",4],["101","Peace Offering","g","c","p",1],["102","Synapse Burnout","g","u","p",1],["103","Take Control","g","u","p",2],["104","We Gotta Live Together","g","u","p",5],["105","Wild in the Streets","g","c","p",5],["106","Alt Cunningham: Soulkiller Architect","b","r","l",null],["107","Evelyn Parker: Beautiful Enigma","b","r","l",null],["108","Judy Álvarez: Braindance Maestro","b","e","l",null],["109","Sasha Yakovleva: Won't Let You Down","b","s","l",5],["110","Wakako Okada: Peace and Harmony","b","r","l",null],["111","Delamain: Rideshare AI","b","u","u",3],["112","Delamain Cab","b","c","u",4],["113","Evelyn Parker: Scheming Siren","b","u","u",2],["114","Hacked Corpo","b","c","u",4],["115","Jacked-In Voodoo Boy","b","c","u",2],["116","Judy Álvarez: Nothing to Doubt","b","s","u",6],["117","Lizzy Wizzy: Delicate Weapon","b","r","u",5],["118","Maman Brigitte: Spirit of Death","b","u","u",5],["119","Misty Olszewski: Mender of Broken Spirits","b","r","u",3],["120","Modded Kusanagi","b","c","u",6],["121","Modded Muramasa","b","c","u",5],["122","Mox Inciters","b","c","u",3],["123","Placide: Voodoo Sentinel","b","r","u",8],["124","Psycho Squad","b","c","u",4],["125","Rita Wheeler: No Stupid Questions","b","c","u",4],["126","Rogue Amendiares: Queen of the Afterlife","b","e","u",5],["127","Westbrook Netrunner","b","c","u",4],["128","Dying Night: V's Pistol","b","r","g",2],["129","NetWatch Netdriver","b","u","g",3],["130","Tetratronic Rippler","b","c","g",1],["131","Chrome Reverie","b","c","p",3],["132","Floor It","b","c","p",1],["133","Les Élémens","b","u","p",5],["134","Nocturne OP55 N1","b","r","p",3],["135","Pyramid Song","b","r","p",3],["136","Reboot Optics","b","c","p",2],["137","Three Mouths, One Desire","b","c","p",2],["138","Towerfall","b","e","p",6],["139","Trust No One","b","c","p",1],["140","Unlikely Bond","b","c","p",4],["141","Adam Smasher: Ender of Legends (Iconique)","r","i","l",9],["142","Dexter DeShawn: Off the Grid (Iconique)","r","i","l",null],["143","Royce: Psycho on the Edge (Iconique)","r","i","l",6],["144","V: Streetkid (art féminin) (Iconique)","r","i","l",5],["145","Dum Dum: Maelstrom Triggerman (Iconique)","y","i","l",null],["146","Kerry Eurodyne: Axe, Attitude, Audience (Iconique)","y","i","l",null],["147","Muamar Reyes: El Capitán (Iconique)","y","i","l",null],["148","River Ward: Detective on the Hunt (Iconique)","y","i","l",null],["149","Rogue Amendiares: Preem Solo (Iconique)","y","i","l",7],["150","Goro Takemura: Vengeful Bodyguard (Iconique)","g","i","l",null],["151","Hanako Arasaka: Daughter of the Emperor (Iconique)","g","i","l",null],["152","Jackie Welles: Mama's Favorite (Iconique)","g","i","l",6],["153","Padre: Man of the Cross (Iconique)","g","i","l",null],["154","Panam Palmer: Nomad Cavalry (Iconique)","g","i","l",null],["155","Alt Cunningham: Soulkiller Architect (Iconique)","b","i","l",null],["156","Evelyn Parker: Beautiful Enigma (Iconique)","b","i","l",null],["157","Judy Álvarez: Braindance Maestro (Iconique)","b","i","l",null],["158","Wakako Okada: Peace and Harmony (Iconique)","b","i","l",null],["159","Johnny Silverhand: Never Stop Fighting (Iconique)","r","i","u",6],["160","Adam Smasher: Metal Over Meat (Iconique)","y","i","u",9],["161","Alt Cunningham: Mother of Daemons (Iconique)","y","i","u",7],["162","Hanako Arasaka: In a Gilded Cage (Iconique)","y","i","u",4],["163","The Relic: Experimental Biochip (Iconique)","y","i","g",5],["164","Sandayu Oda: Hanako's Guardian (Iconique)","g","i","u",7],["165","Overwatch: Panam's Gift (Iconique)","g","i","g",4],["166","Rogue Amendiares: Queen of the Afterlife (Iconique)","b","i","u",5],["167","Towerfall (Iconique)","b","i","p",6],["168","Johnny Silverhand: Rocking Renegade (Iconique)","r","i","l",null],["169","Sasha Yakovleva: Won't Let You Down (Iconique)","b","i","l",5],["170","Panam Palmer: Strength Through Family (Iconique)","g","i","u",6],["171","Judy Álvarez: Nothing to Doubt (Iconique)","b","i","u",6]].map(a=>({n:a[0],name:a[1],c:a[2],r:a[3],t:a[4],cost:a[5]}));
+const CIMG="https://playdreamz.com/wp-content/uploads/2026/11/cyberpunk-tcg-cards/";
+const COL={r:["Rouge","#e0314b"],y:["Jaune","#fcee0a"],g:["Vert","#2bd96b"],b:["Bleu","#2f9bff"]};
+const RAR={c:"Commune",u:"Peu commune",r:"Rare",e:"Épique",s:"Secrète",i:"Iconique"};
+const TYP={l:"Légende",u:"Unité",g:"Équipement",p:"Programme"};
+const RORD="curesi",CORD="rygb",TORD="lugp";
+const TC={q:"",col:new Set(),rar:new Set(),typ:new Set(),grp:"none",srt:"num"};
+function cmpBy(k){
+  const num=c=>parseInt(c.n,10)*10+(c.n.endsWith("b")?1:0);
+  return{num:(a,b)=>num(a)-num(b),
+   nom:(a,b)=>a.name.localeCompare(b.name,"fr"),
+   cout:(a,b)=>(a.cost==null)-(b.cost==null)||a.cost-b.cost,
+   rar:(a,b)=>RORD.indexOf(a.r)-RORD.indexOf(b.r),
+   col:(a,b)=>CORD.indexOf(a.c)-CORD.indexOf(b.c)}[k];
+}
+function cardTile(c){
+  const b=el("button","cd");b.setAttribute("aria-label",c.name);
+  const col=COL[c.c];
+  const ph=el("div","ph",c.name);ph.style.background="#111";ph.style.color=col[1];
+  const im=el("img");im.alt=c.name;im.loading="lazy";im.referrerPolicy="no-referrer";
+  im.onerror=()=>{im.remove()};im.src=CIMG+"wnc-"+c.n+".webp";
+  const bar=el("div","bar");bar.style.background=col[1];
+  b.append(ph,im,bar,el("span","no",c.n));
+  if(c.cost!=null)b.append(el("span","co",c.cost));
+  b.onclick=()=>{$("lbi").src=CIMG+"large/wnc-"+c.n+".webp";$("lbi").onerror=()=>{$("lbi").onerror=null;$("lbi").src=CIMG+"wnc-"+c.n+".webp"};
+    $("lbn").textContent=c.name;$("lbt").textContent=col[0]+" · "+RAR[c.r]+" · "+TYP[c.t]+(c.cost!=null?" · coût "+c.cost:"");$("lbs").textContent="N° "+c.n;$("lb").classList.add("open")};
+  return b;
+}
+function renderCards(){
+  const g=$("cg");if(!g)return;g.innerHTML="";
+  const q=TC.q.toLowerCase().split(/\s+/).filter(Boolean);
+  let d=CARDS.filter(c=>(!TC.col.size||TC.col.has(c.c))&&(!TC.rar.size||TC.rar.has(c.r))&&(!TC.typ.size||TC.typ.has(c.t))&&q.every(w=>c.name.toLowerCase().includes(w)));
+  const s=cmpBy(TC.srt);
+  const grpKey={couleur:c=>CORD.indexOf(c.c),rareté:c=>RORD.indexOf(c.r),type:c=>TORD.indexOf(c.t)};
+  const grpLab={couleur:c=>COL[c.c][0],rareté:c=>RAR[c.r],type:c=>TYP[c.t]};
+  if(TC.grp!="none"){const k=grpKey[TC.grp];d.sort((a,b)=>k(a)-k(b)||s(a,b)||cmpBy("num")(a,b))}
+  else d.sort((a,b)=>s(a,b)||cmpBy("num")(a,b));
+  $("cc").textContent=d.length+" carte"+(d.length>1?"s":"")+" sur "+CARDS.length;
+  let last=null;
+  d.forEach(c=>{
+    if(TC.grp!="none"){const l=grpLab[TC.grp](c);if(l!==last){last=l;g.append(el("div","gh",l))}}
+    g.append(cardTile(c))});
+  if(!d.length)g.append(el("div","none","Aucune carte ne correspond."));
+}
+function drawCards(L){
+  $("st").textContent="";
+  const ctl=el("div","ctl");
+  const inp=el("input");inp.type="search";inp.placeholder="Nom de carte…";inp.value=TC.q;inp.oninput=()=>{TC.q=inp.value;renderCards()};ctl.append(inp);
+  const row=(lab,items,set)=>{const r=el("div","fl");r.append(el("span",null,lab));
+    items.forEach(([k,t])=>{const b=el("button","fc"+(set.has(k)?" on":""),t);b.onclick=()=>{set.has(k)?set.delete(k):set.add(k);b.classList.toggle("on");renderCards()};r.append(b)});ctl.append(r)};
+  row("Couleur",Object.keys(COL).map(k=>[k,COL[k][0]]),TC.col);
+  row("Rareté",Object.keys(RAR).map(k=>[k,RAR[k]]),TC.rar);
+  row("Type",Object.keys(TYP).map(k=>[k,TYP[k]]),TC.typ);
+  const sel=(lab,opts,key)=>{const r=el("label");r.append(document.createTextNode(lab));const s=el("select");
+    opts.forEach(([v,t])=>{const o=el("option",null,t);o.value=v;if(TC[key]==v)o.selected=true;s.append(o)});s.onchange=()=>{TC[key]=s.value;renderCards()};r.append(s);return r};
+  const fl=el("div","fl");fl.style.marginBottom="0";
+  fl.append(sel("Grouper",[["none","Aucun"],["couleur","Couleur"],["rareté","Rareté"],["type","Type"]],"grp"),sel("Trier",[["num","N°"],["nom","Nom"],["cout","Coût"],["rar","Rareté"],["col","Couleur"]],"srt"));
+  const rs=el("button","fc","Réinitialiser");rs.onclick=()=>{TC.q="";TC.col.clear();TC.rar.clear();TC.typ.clear();TC.grp="none";TC.srt="num";draw()};fl.append(rs);
+  ctl.append(fl);
+  L.append(ctl);
+  const cc=el("div","cnt");cc.id="cc";L.append(cc);
+  const g=el("div");g.id="cg";L.append(g);
+  L.append(el("p","note","Set « Welcome to Night City » · images : playdreamz.com · les cartes appartiennent à CD PROJEKT RED / WeirdCo. Touche une carte pour l'agrandir."));
+  renderCards();
+}
 /* quiz */
 const QUIZ=[
  ["Comment s'appelle le personnage que tu incarnes dans Cyberpunk 2077 ?",["V","K","Johnny","Vik"],0,"V est le mercenaire (ou la mercenaire) du jeu."],
@@ -423,6 +584,8 @@ function card(n){
 }
 function draw(){
   const L=$("list");L.innerHTML="";
+  if(cat=="tr")return drawRules(L);
+  if(cat=="tc")return drawCards(L);
   if(cat=="cal")return drawCal(L);
   if(cat=="live")return drawLive(L);
   if(cat=="quiz")return drawQuiz(L);
@@ -465,13 +628,13 @@ function finishKnown(){
 async function load(){
   if(loading)return;loading=true;
   const OLD=DATA,fresh=[];let done=0,total=4,err="";
-  const upd=()=>{DATA=dedupe(fresh.concat(OLD));tabsUI();if(["tout","jeu","série","tcg","univers","dérivés"].includes(cat))draw();
+  const upd=()=>{DATA=dedupe(fresh.concat(OLD));tabsUI();if(inNews())draw();
     if(!DATA.length)$("st").textContent=done<total?"Chargement des sources… "+done+"/"+total:"Aucune actu Cyberpunk 2077 trouvée pour l'instant."};
   try{
     try{const f=await getPart(0);total=f.parts;fresh.push(...f.items)}catch(e){err=e&&e.message?e.message:String(e)}
     done=1;upd();
     await Promise.all(Array.from({length:Math.max(0,total-1)},(_,k)=>getPart(k+1).then(p=>{fresh.push(...p.items)}).catch(e=>{err=err||(e&&e.message?e.message:String(e))}).then(()=>{done++;upd()})));
-    if(fresh.length){DATA=dedupe(fresh.slice());finishKnown();tabsUI();if(!["live","cal","quiz","vid"].includes(cat))draw();lset("nc_data3",DATA)}
+    if(fresh.length){DATA=dedupe(fresh.slice());finishKnown();tabsUI();if(inNews()||cat=="fav")draw();lset("nc_data3",DATA)}
     else if(!OLD.length)$("st").textContent="Signal perdu : "+(err||"aucune réponse")+" | API = "+API;
   }finally{loading=false}
 }
