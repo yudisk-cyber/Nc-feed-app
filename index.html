@@ -5,35 +5,59 @@
 <link rel="manifest" href="manifest.json"><link rel="apple-touch-icon" href="icon.svg">
 <title>NIGHT CITY FEED</title>
 <style>
-:root{--y:#fcee0a;--bg:#0b0b0b;--p:#151515;--t:#e8e8e8;--m:#8a8a8a;--c:#00f0ff;--rail:72px;--hh:110px}
+:root{--y:#fcee0a;--bg:#0b0b0b;--p:#151515;--t:#e8e8e8;--m:#8a8a8a;--c:#00f0ff;--r:#ff2a55;--rail:72px;--hh:110px}
 @media(min-width:520px){:root{--rail:120px}}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--t);font:15px/1.4 "Rajdhani","Segoe UI",Arial,sans-serif;padding-bottom:84px}
-header{position:sticky;top:0;z-index:6;background:var(--bg);border-bottom:2px solid var(--y);padding:calc(10px + env(safe-area-inset-top)) 14px 10px}
+header{position:sticky;top:0;z-index:6;background:var(--bg);border-bottom:2px solid var(--y);padding:calc(8px + env(safe-area-inset-top)) 14px 8px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 h1{margin:0;font-size:22px;letter-spacing:3px;color:var(--y);text-transform:uppercase}
 h1 small{display:block;font-size:11px;color:var(--m);letter-spacing:2px}
+#sb{background:none;border:1px solid var(--m);color:var(--t);width:38px;height:34px;display:flex;align-items:center;justify-content:center}
+#sb.on{background:var(--y);color:#000;border-color:var(--y)}
+#sr{padding-top:8px}#sr[hidden]{display:none}
+#q{width:100%;background:var(--p);border:1px solid var(--y);color:var(--t);padding:8px 10px;font:inherit;border-radius:0}
 .tabs{display:flex;gap:6px;overflow-x:auto;padding-top:8px;scrollbar-width:none}
 .tabs::-webkit-scrollbar{display:none}
 .tabs button{flex:none;background:none;border:1px solid var(--m);color:var(--t);padding:5px 10px;text-transform:uppercase;letter-spacing:1px;font:inherit;font-size:12px;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px))}
 .tabs button b{font-weight:400;color:var(--m);margin-left:4px}
 .tabs button.on{background:var(--y);color:#000;border-color:var(--y);font-weight:700}
 .tabs button.on b{color:#000}
+.t2 button{border-color:#3a6a70;color:var(--c);font-size:11px;padding:4px 9px}
+.t2 button.on{background:var(--c);border-color:var(--c);color:#000}
 main{padding:12px 12px 12px calc(var(--rail) + 12px)}
-#st:empty{display:none}
 #st{color:var(--m);text-align:center;padding:24px 8px}
+#st:empty{display:none}
+@keyframes gl{0%{transform:none}15%{transform:translateX(-5px);filter:hue-rotate(90deg) saturate(2)}30%{transform:translateX(6px);clip-path:inset(10% 0 40% 0)}45%{transform:translateX(-3px);clip-path:inset(50% 0 10% 0)}60%{transform:translateX(2px);clip-path:none;filter:none}100%{transform:none;filter:none;clip-path:none}}
+#list.gl{animation:gl .35s steps(2,end)}
+@media(prefers-reduced-motion:reduce){#list.gl{animation:none}}
+/* cartes */
 .card{position:relative;background:var(--p);border-left:4px solid var(--y);margin-bottom:10px}
 .card:active{background:#222}
+.card.read{opacity:.62}
 .lk{display:flex;gap:10px;padding:10px 46px 10px 10px;text-decoration:none;color:inherit}
-.star{position:absolute;top:0;right:0;width:46px;height:46px;background:none;border:0;color:var(--m);font-size:26px;line-height:1;cursor:pointer}
+.star,.share{position:absolute;right:0;width:46px;background:none;border:0;color:var(--m);cursor:pointer;line-height:1}
+.star{top:0;height:46px;font-size:26px}.share{bottom:0;height:40px;font-size:18px}
 .star.on{color:var(--y)}
 .th{flex:none;width:76px;height:76px;background:#000;border:1px solid #333;overflow:hidden;position:relative}
 .th img{width:100%;height:100%;object-fit:cover;display:block}
 .th.fb img{filter:saturate(.8) brightness(.85)}
 .bd{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+.tags{display:flex;gap:5px;flex-wrap:wrap}
 .tag{align-self:flex-start;font-size:10px;color:#000;background:var(--y);padding:0 6px;letter-spacing:1px;text-transform:uppercase;font-weight:700}
+.tag.new{background:var(--c)}
 .card h3{margin:0;font-size:15px;line-height:1.25;overflow-wrap:anywhere}
 .meta{font-size:11px;color:var(--m)}
 .go{color:var(--c);font-size:11px;letter-spacing:1px}
+/* vidéos */
+.vc{position:relative;background:var(--p);border-left:4px solid var(--c);margin-bottom:12px}
+.vc a{display:block;color:inherit;text-decoration:none}
+.vt{position:relative;aspect-ratio:16/9;background:#000;overflow:hidden}
+.vt img{width:100%;height:100%;object-fit:cover;display:block}
+.vt::after{content:"▶";position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:36px;color:var(--y);text-shadow:0 0 14px #000;background:linear-gradient(transparent 55%,rgba(0,0,0,.55))}
+.vb{padding:8px 50px 8px 10px;display:flex;flex-direction:column;gap:3px}
+.vc .star{top:auto;bottom:0}.vc .share{display:none}
+/* étagères */
 .sh{color:var(--y);letter-spacing:2px;font-size:12px;margin:16px 0 8px;text-transform:uppercase;border-bottom:1px solid #333;padding-bottom:4px}
 .sh:first-child{margin-top:0}
 .none{color:var(--m);font-size:13px;padding:6px 0 12px}
@@ -49,21 +73,53 @@ main{padding:12px 12px 12px calc(var(--rail) + 12px)}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .chip{border:1px solid var(--m);color:var(--t);text-decoration:none;font-size:12px;padding:4px 9px;letter-spacing:1px;text-transform:uppercase}
 .chip:active{background:var(--y);color:#000}
+/* live */
+.panel{background:var(--p);border-left:4px solid var(--y);padding:12px;margin-bottom:10px}
+.panel .lab{color:var(--m);font-size:11px;letter-spacing:2px;text-transform:uppercase}
+.big{font-size:40px;line-height:1.1;color:var(--y);letter-spacing:2px;font-weight:700}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:8px;padding:6px 0;border-top:1px solid #262626}
+.row:first-of-type{border-top:0}
+.row a{color:inherit;text-decoration:none}
+.px{color:var(--y);font-weight:700;white-space:nowrap}
+.px s{color:var(--m);font-weight:400;margin-right:6px}
+.off{color:#000;background:var(--c);padding:0 5px;font-size:11px;font-weight:700;margin-left:6px}
+/* sorties */
+.ev{display:flex;gap:10px;background:var(--p);border-left:4px solid var(--y);padding:10px;margin-bottom:8px}
+.ev.past{opacity:.7;border-left-color:#555}
+.when{flex:none;width:74px;text-align:center;border:1px solid #333;padding:6px 2px;align-self:flex-start}
+.when b{display:block;color:var(--y);font-size:17px;line-height:1.1}
+.when span{font-size:10px;color:var(--m);letter-spacing:1px;text-transform:uppercase}
+.ev h3{margin:0 0 2px;font-size:15px;line-height:1.25}.ev p{margin:0;font-size:12px;color:var(--m)}
+/* quiz */
+.qbox{background:var(--p);border-left:4px solid var(--c);padding:12px}
+.qbox h3{margin:6px 0 12px;font-size:18px;line-height:1.3}
+.qn{color:var(--c);font-size:11px;letter-spacing:2px}
+.opt{display:block;width:100%;text-align:left;background:#101010;border:1px solid #444;color:var(--t);padding:10px;margin-bottom:8px;font:inherit}
+.opt.ok{border-color:#2bd96b;background:#0c2a18}.opt.ko{border-color:var(--r);background:#2a0c14}
+.expl{color:var(--m);font-size:13px;margin:8px 0}
+.btn{background:var(--y);color:#000;border:0;padding:10px 18px;font:700 14px inherit;letter-spacing:2px;text-transform:uppercase;margin-top:6px}
+.score{font-size:46px;color:var(--y);font-weight:700}
+#toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);background:var(--y);color:#000;padding:8px 14px;font-weight:700;letter-spacing:1px;z-index:40;display:none}
 /* pubs déroulantes à gauche */
 #rail{position:fixed;left:0;top:var(--hh);bottom:0;width:var(--rail);background:#050505;border-right:2px solid var(--y);overflow:hidden;z-index:4}
 #rail .lab{position:absolute;top:0;left:0;right:0;z-index:2;background:var(--y);color:#000;font-size:9px;letter-spacing:2px;text-align:center;padding:2px 0;font-weight:700}
-#track{padding-top:22px;animation:scroll 110s linear infinite;will-change:transform}
+#track{padding-top:22px;animation:scroll 120s linear infinite;will-change:transform}
 #track.paused{animation-play-state:paused}
 @keyframes scroll{to{transform:translateY(-50%)}}
 .ad{display:block;margin:0 5px 9px;border:1px solid #444;position:relative;cursor:pointer;background:#000}
 .ad img{width:100%;display:block}
 .ad::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,.18) 0 1px,transparent 1px 3px);pointer-events:none}
+.tad{margin:0 5px 9px;border:1px solid var(--y);background:#000;padding:7px 4px;text-align:center}
+.tad b{display:block;color:var(--y);font-size:11px;letter-spacing:1px}
+.tad span{display:block;color:var(--t);font-size:9px;line-height:1.2;margin-top:2px}
+@media(min-width:520px){.tad b{font-size:14px}.tad span{font-size:11px}}
 @media(prefers-reduced-motion:reduce){#track{animation:none}#rail{overflow-y:auto}}
 #lb{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:30;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center}
 #lb.open{display:flex}
-#lb img{max-width:min(78vw,340px);max-height:68vh;border:2px solid var(--y)}
+#lb img{max-width:min(78vw,340px);max-height:64vh;border:2px solid var(--y)}
 #lb b{color:var(--y);letter-spacing:2px;margin-top:12px;font-size:18px}
 #lb span{color:var(--m);font-size:12px;letter-spacing:2px;margin-top:2px}
+#lb i{color:var(--c);font-size:12px;font-style:normal;margin-top:10px;letter-spacing:1px}
 /* comlink */
 #fab{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom));z-index:9;background:var(--y);color:#000;border:0;padding:12px 16px;font:700 14px sans-serif;letter-spacing:2px;display:none}
 #chat{position:fixed;inset:0;background:var(--bg);z-index:20;display:none;flex-direction:column;padding-top:env(safe-area-inset-top)}#chat.open{display:flex}
@@ -72,10 +128,17 @@ main{padding:12px 12px 12px calc(var(--rail) + 12px)}
 .ai{background:#1a1800;border-left:3px solid var(--y)}.me{margin-left:auto;background:#001a1c;border-right:3px solid var(--c);text-align:right}
 #f{display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom))}#f input{flex:1;background:var(--p);border:1px solid var(--m);color:var(--t);padding:10px;min-width:0}#f button{background:var(--y);border:0;padding:0 16px;font-weight:700}
 </style></head><body>
-<header id="hd"><h1>Night City Feed<small>// CYBERPUNK 2077 · ACTUS EN DIRECT</small></h1><div class="tabs" id="tabs"></div></header>
+<header id="hd">
+ <div class="top"><h1>Night City Feed<small>// CYBERPUNK 2077 · ACTUS EN DIRECT</small></h1>
+  <button id="sb" aria-label="Rechercher"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg></button></div>
+ <div id="sr" hidden><input id="q" type="search" placeholder="Rechercher dans cet onglet…" autocomplete="off"></div>
+ <div class="tabs" id="tabs"></div>
+ <div class="tabs t2" id="tabs2"></div>
+</header>
 <aside id="rail"><div class="lab">PUBLICITÉ</div><div id="track"></div></aside>
 <main><div id="st">Connexion au réseau…</div><div id="list"></div></main>
-<div id="lb"><img id="lbi" alt=""><b id="lbn"></b><span id="lbt"></span></div>
+<div id="lb"><img id="lbi" alt=""><b id="lbn"></b><span id="lbt"></span><i id="lbs"></i></div>
+<div id="toast"></div>
 <button id="fab">▸ COMLINK</button>
 <section id="chat"><div id="ch"><span>// COMLINK</span><button id="close">FERMER</button></div><div id="log"></div>
 <form id="f"><input id="in" placeholder="Écris ton message…" autocomplete="off"><button>ENVOYER</button></form></section>
@@ -83,40 +146,52 @@ main{padding:12px 12px 12px calc(var(--rail) + 12px)}
 <script>
 // >>> adresse de ton Worker <<<
 const API="https://nc-feed.lucasfigeac140702.workers.dev";
-const CHAT=false; // true si tu as ajouté ANTHROPIC_API_KEY au Worker
+const CHAT=false;
 const $=id=>document.getElementById(id);
 const ADS=window.ADS||[];
-const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"],["fav","★ favoris"]];
-const LABEL={"jeu":"Jeu","série":"Série & film","tcg":"TCG & jeux de table","univers":"Univers","dérivés":"Produits dérivés"};
-let cat="tout",DATA=[];
+const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"]];
+const TABS2=[["fav","★ favoris"],["vid","▶ vidéos"],["live","● live"],["cal","sorties"],["quiz","quiz"]];
+const LABEL={"jeu":"Jeu","série":"Série & film","tcg":"TCG & jeux de table","univers":"Univers","dérivés":"Produits dérivés","vidéo":"Vidéo"};
+let cat="tout",DATA=[],VIDS=[],Q="",NEWSET=new Set();
 function hh(){document.documentElement.style.setProperty("--hh",$("hd").offsetHeight+"px")}
 function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)}
-/* favoris (gardés sur ce téléphone) */
-function favs(){try{const a=JSON.parse(localStorage.getItem("nc_fav")||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
-function saveFavs(a){try{localStorage.setItem("nc_fav",JSON.stringify(a))}catch(e){}}
-function isFav(link){return favs().some(f=>f.link==link)}
+function ls(k,d){try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}}
+function lset(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function toast(t){const o=$("toast");o.textContent=t;o.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>o.style.display="none",1800)}
+/* favoris */
+function favs(){const a=ls("nc_fav",[]);return Array.isArray(a)?a:[]}
+function isFav(l){return favs().some(f=>f.link==l)}
 function toggleFav(n){
   let a=favs();
   if(a.some(f=>f.link==n.link))a=a.filter(f=>f.link!=n.link);
-  else a.unshift({title:n.title,link:n.link,image:n.image||"",date:n.date||"",source:n.source||"",cat:n.cat,saved:Date.now()});
-  saveFavs(a);tabsUI();
+  else a.unshift({title:n.title,orig:n.orig||"",link:n.link,image:n.image||"",date:n.date||"",source:n.source||"",cat:n.cat,saved:Date.now()});
+  lset("nc_fav",a);tabsUI();
+}
+/* lus / nouveaux */
+let READ=new Set(ls("nc_read",[]));
+function markRead(l){if(READ.has(l))return;READ.add(l);lset("nc_read",[...READ].slice(-600))}
+/* partage */
+async function share(n){
+  try{if(navigator.share){await navigator.share({title:n.title,url:n.link});return}}catch(e){if(e&&e.name=="AbortError")return}
+  try{await navigator.clipboard.writeText(n.link);toast("Lien copié")}catch(e){prompt("Copie le lien :",n.link)}
 }
 /* onglets */
+function mkTabs(box,list){
+  list.forEach(([k,l])=>{
+    const b=el("button",null);b.dataset.k=k;b.append(document.createTextNode(l),el("b"));
+    b.onclick=()=>{if(cat==k)return;cat=k;Q="";$("q").value="";tabsUI();draw();glitch()};box.append(b)});
+}
+function glitch(){const L=$("list");L.classList.remove("gl");void L.offsetWidth;L.classList.add("gl")}
 function tabsUI(){
-  const T=$("tabs");
-  if(!T.children.length)TABS.forEach(([k,l])=>{
-    const b=document.createElement("button");b.dataset.k=k;b.append(document.createTextNode(l));
-    const c=document.createElement("b");b.append(c);
-    b.onclick=()=>{cat=k;tabsUI();draw()};T.append(b)});
+  if(!$("tabs").children.length){mkTabs($("tabs"),TABS);mkTabs($("tabs2"),TABS2)}
   const F=favs();
-  [...T.children].forEach(b=>{
-    const k=b.dataset.k;b.className=k==cat?"on":"";
-    const n=k=="tout"?DATA.length:k=="fav"?F.length:DATA.filter(a=>a.cat==k).length;
-    b.lastChild.textContent=(DATA.length||k=="fav")&&n?n:"";
+  document.querySelectorAll(".tabs button").forEach(b=>{
+    const k=b.dataset.k;b.classList.toggle("on",k==cat);
+    const n=k=="tout"?DATA.length:k=="fav"?F.length:k=="vid"?VIDS.length:["live","cal","quiz"].includes(k)?0:DATA.filter(a=>a.cat==k).length;
+    b.lastChild.textContent=n?n:"";
   });
   hh();
 }
-/* étagères : où acheter (produits dérivés) et univers cyberpunk */
 const enc=encodeURIComponent,plus=q=>enc(q.trim()).replace(/%20/g,"+"),dash=q=>enc(q.trim().replace(/\s+/g,"-"));
 const STORES={
  amz:["Amazon",q=>"https://www.amazon.fr/s?k="+plus(q)],
@@ -190,36 +265,157 @@ function uniShelf(){
     c.append(ch);f.append(c)});
   return f;
 }
+
+/* sorties (dates vérifiées le 17/11/2026) */
+const EVENTS=[
+ {d:"2026-10-20",t:"Cyberpunk: Edgerunners 2",x:"Saison 2 de l'anime sur Netflix (10 épisodes)."},
+ {d:"2026-10-22",t:"Mise à jour 2.5 « Edgerunners 2 Update »",x:"Contenu lié à la saison 2 dans Cyberpunk 2077."},
+ {d:"2026-10-01",t:"Cyberpunk TCG — sortie en boutique",x:"Lancement commercial du jeu de cartes."},
+ {d:"2026-12-10",t:"6 ans de Cyberpunk 2077",x:"Anniversaire de la sortie du jeu (10 décembre 2020)."},
+ {w:"Printemps 2027",t:"Cyberpunk TCG — extension « Edgerunners: Burn Bright »",x:"Deuxième set du jeu de cartes."},
+ {w:"Pas avant 2028",t:"Cyberpunk 2 (Project Orion)",x:"Toujours en pré-production selon CD PROJEKT RED."},
+ {w:"En développement",t:"Film Cyberpunk (Paramount)",x:"Aucune date annoncée."}
+];
+function drawCal(L){
+  $("st").textContent="";
+  L.append(el("p","note","Dates vérifiées le 17/11/2026 — elles peuvent évoluer."));
+  const now=new Date();now.setHours(0,0,0,0);
+  const dated=EVENTS.filter(e=>e.d).map(e=>({...e,n:Math.round((new Date(e.d+"T00:00:00")-now)/864e5)}));
+  const up=dated.filter(e=>e.n>=0).sort((a,b)=>a.n-b.n),past=dated.filter(e=>e.n<0).sort((a,b)=>b.n-a.n);
+  const one=(e,cls)=>{
+    const c=el("div","ev"+cls),w=el("div","when");
+    if(e.d){const dt=new Date(e.d+"T00:00:00");
+      w.append(el("b",null,e.n==0?"AUJ.":e.n>0?"J-"+e.n:"-"+(-e.n)+" j"),el("span",null,dt.toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"})))}
+    else w.append(el("b",null,"…"),el("span",null,e.w));
+    const b=el("div");b.append(el("h3",null,e.t),el("p",null,e.x));c.append(w,b);L.append(c)};
+  L.append(el("div","sh","À venir"));up.forEach(e=>one(e,""));EVENTS.filter(e=>!e.d).forEach(e=>one(e,""));
+  L.append(el("div","sh","Déjà sorti"));past.forEach(e=>one(e,"past"));
+}
+/* live : joueurs Steam, prix, promos */
+let STATS=null,statsT=0;
+async function loadStats(){
+  try{const r=await fetch(API+"/stats",{cache:"no-cache"});if(!r.ok)throw 0;STATS=await r.json()}catch(e){STATS=STATS||{error:1}}
+  if(cat=="live")draw();
+}
+function drawLive(L){
+  $("st").textContent="";
+  if(!STATS){L.append(el("div","none","Connexion aux serveurs Steam…"));return}
+  if(STATS.error&&!STATS.players){L.append(el("div","none","Données live indisponibles pour l'instant."));return}
+  const p=el("div","panel");p.append(el("div","lab","Joueurs en ligne maintenant (Steam)"),el("div","big",STATS.players!=null?Number(STATS.players).toLocaleString("fr-FR"):"—"));
+  p.append(el("div","meta","Cyberpunk 2077 · mis à jour "+(STATS.updated?new Date(STATS.updated).toLocaleTimeString("fr-FR",{timeStyle:"short"}):"")));L.append(p);
+  L.append(el("div","sh","Prix sur Steam (France)"));
+  const pp=el("div","panel");
+  (STATS.prices||[]).forEach(x=>{const r=el("div","row");r.append(el("span",null,x.name));
+    const v=el("span","px");if(x.discount>0){v.append(el("s",null,x.initial),document.createTextNode(x.final),el("span","off","-"+x.discount+"%"))}else v.textContent=x.final;r.append(v);pp.append(r)});
+  if(!(STATS.prices||[]).length)pp.append(el("div","none","Prix indisponibles."));L.append(pp);
+  L.append(el("div","sh","Meilleures promos (prix en USD)"));
+  const dp=el("div","panel");
+  (STATS.deals||[]).forEach(x=>{const r=el("a","row");r.href=x.url;r.target="_blank";r.rel="noopener";r.append(el("span",null,x.title+" · "+x.store));
+    const v=el("span","px");v.append(el("s",null,"$"+x.normal),document.createTextNode("$"+x.price),el("span","off","-"+Math.round(x.savings)+"%"));r.append(v);dp.append(r)});
+  if(!(STATS.deals||[]).length)dp.append(el("div","none","Aucune promo trouvée."));L.append(dp);
+}
+/* vidéos */
+function videoCard(n){
+  const c=el("div","vc"),a=el("a");a.href=n.link;a.target="_blank";a.rel="noopener";
+  const t=el("div","vt"),im=el("img");im.alt="";im.loading="lazy";im.referrerPolicy="no-referrer";im.src=n.image;t.append(im);
+  const b=el("div","vb");b.append(el("h3",null,n.title),el("div","meta",(n.source||"")+(n.date?" · "+new Date(n.date).toLocaleDateString("fr-FR"):"")));
+  a.append(t,b);a.onclick=()=>markRead(n.link);
+  const s=el("button","star");s.setAttribute("aria-label","Favori");
+  const paint=()=>{const on=isFav(n.link);s.textContent=on?"★":"☆";s.classList.toggle("on",on)};paint();
+  s.onclick=e=>{e.preventDefault();toggleFav(n);paint()};
+  c.append(a,s);return c;
+}
+async function loadVids(){
+  const c=ls("nc_vids",null);
+  if(c&&Date.now()-c.t<3e5&&c.items.length){VIDS=c.items;tabsUI();if(cat=="vid")draw();return}
+  try{const r=await fetch(API+"/videos",{cache:"no-cache"});if(!r.ok)throw 0;const d=await r.json();VIDS=d.items||[];lset("nc_vids",{t:Date.now(),items:VIDS})}catch(e){VIDS=VIDS.length?VIDS:(c?c.items:[])}
+  VIDS.length||(VIDS=[]);tabsUI();if(cat=="vid")draw();
+}
+/* quiz */
+const QUIZ=[
+ ["Comment s'appelle le personnage que tu incarnes dans Cyberpunk 2077 ?",["V","K","Johnny","Vik"],0,"V est le mercenaire (ou la mercenaire) du jeu."],
+ ["Quel acteur prête ses traits à Johnny Silverhand ?",["Idris Elba","Keanu Reeves","Brad Pitt","Tom Hardy"],1,"Keanu Reeves joue Johnny Silverhand."],
+ ["Quelle est la ville principale du jeu ?",["Neo-Tokyo","Los Santos","Night City","Gotham"],2,"Night City, en Californie libre."],
+ ["Quel studio a développé Cyberpunk 2077 ?",["Ubisoft","CD PROJEKT RED","Bethesda","Rockstar"],1,"Le studio polonais, aussi derrière The Witcher."],
+ ["Quand le jeu est-il sorti ?",["10 décembre 2020","27 mai 2015","1er janvier 2021","14 octobre 2019"],0,"Sortie le 10 décembre 2020."],
+ ["Comment s'appelle le meilleur ami de V au début du jeu ?",["Vik","Jackie Welles","Takemura","Dex"],1,"Jackie Welles, mercenaire au grand cœur."],
+ ["Quelle est la monnaie de Night City ?",["Les crédits","Les eurodollars","Les bitcoins","Les dollars-lune"],1,"Les eurodollars (eddies)."],
+ ["Comment s'appelle l'extension du jeu ?",["Phantom Liberty","Dogtown Rising","Blackwall","Silverhand"],0,"Phantom Liberty, qui se déroule à Dogtown."],
+ ["Quel acteur joue Solomon Reed dans Phantom Liberty ?",["Idris Elba","Samuel L. Jackson","Mahershala Ali","Denzel Washington"],0,"Idris Elba."],
+ ["Quel studio a réalisé l'anime Edgerunners ?",["Madhouse","Bones","Studio Trigger","Ghibli"],2,"Studio Trigger."],
+ ["Comment s'appelle le héros d'Edgerunners ?",["Kiwi","David Martinez","Rebecca","Maine"],1,"David Martinez, lycéen devenu edgerunner."],
+ ["Quelle corporation est visée par l'explosion nucléaire de 2023 ?",["Militech","Arasaka","Biotechnica","Kang Tao"],1,"La tour Arasaka est détruite en 2023."],
+ ["Qui a créé le jeu de rôle Cyberpunk d'origine ?",["Gary Gygax","Mike Pondsmith","Frank Herbert","Neal Stephenson"],1,"Mike Pondsmith, en 1988."],
+ ["Quel roman de William Gibson a fixé les codes du cyberpunk ?",["Snow Crash","Neuromancien","Dune","Hyperion"],1,"Neuromancien, publié en 1984."],
+ ["Quel objet V doit-il garder dans la tête ?",["Un Relic","Une puce de mémoire de Jackie","Un cube de données","Un Braindance"],0,"Le Relic, biopuce d'Arasaka contenant Johnny."],
+ ["Quel est le clan nomade de Panam ?",["Les Aldecaldos","Les Wraiths","Les Voodoo Boys","Les Valentinos"],0,"Les Aldecaldos."],
+ ["Comment s'appelle le bar emblématique de Night City ?",["Afterlife","Lizzie's","Totentanz","Clouds"],0,"Afterlife, le bar des mercenaires."],
+ ["Comment s'appelle l'IA du taxi dans le jeu ?",["Delamain","Alt","Mikoshi","Soulkiller"],0,"Delamain, l'IA des taxis."]
+];
+let QS=null;
+function shuf(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function newQuiz(){QS={i:0,sc:0,list:shuf(QUIZ).slice(0,10).map(q=>({q:q[0],o:shuf(q[1].map((t,i)=>({t,ok:i==q[2]}))),x:q[3]})),ans:null}}
+function drawQuiz(L){
+  $("st").textContent="";if(!QS)newQuiz();
+  const b=el("div","qbox");L.append(b);
+  if(QS.i>=QS.list.length){
+    const best=Math.max(ls("nc_best",0),QS.sc);lset("nc_best",best);
+    const msg=QS.sc>=9?"Légende de Night City.":QS.sc>=6?"Edgerunner confirmé.":QS.sc>=3?"Encore un peu de rue à faire.":"Tu es un touriste, choom.";
+    b.append(el("div","qn","RÉSULTAT"),el("div","score",QS.sc+" / "+QS.list.length),el("p",null,msg),el("p","meta","Meilleur score : "+best+" / "+QS.list.length));
+    const r=el("button","btn","Rejouer");r.onclick=()=>{newQuiz();draw()};b.append(r);return;
+  }
+  const c=QS.list[QS.i];
+  b.append(el("div","qn","QUESTION "+(QS.i+1)+" / "+QS.list.length+" · SCORE "+QS.sc),el("h3",null,c.q));
+  c.o.forEach((o,k)=>{
+    const t=el("button","opt",o.t);
+    if(QS.ans!=null){t.disabled=true;if(o.ok)t.classList.add("ok");else if(k==QS.ans)t.classList.add("ko")}
+    else t.onclick=()=>{QS.ans=k;if(o.ok)QS.sc++;draw()};
+    b.append(t)});
+  if(QS.ans!=null){b.append(el("p","expl",c.x));
+    const n=el("button","btn",QS.i+1>=QS.list.length?"Voir le score":"Suivant ▸");n.onclick=()=>{QS.i++;QS.ans=null;draw()};b.append(n)}
+}
 /* articles */
+function match(n){
+  if(!Q)return true;
+  const h=((n.title||"")+" "+(n.orig||"")+" "+(n.source||"")+" "+(LABEL[n.cat]||n.cat||"")).toLowerCase();
+  return Q.split(/\s+/).every(w=>h.includes(w));
+}
+function card(n){
+  const c=el("div","card"+(READ.has(n.link)?" read":""));
+  const a=el("a","lk");a.href=n.link;a.target="_blank";a.rel="noopener";
+  a.onclick=()=>{markRead(n.link);c.classList.add("read");const t=c.querySelector(".tag.new");t&&t.remove()};
+  const th=el("div","th"),im=el("img");im.alt="";im.loading="lazy";im.referrerPolicy="no-referrer";
+  const fb=()=>{if(ADS.length){th.classList.add("fb");im.src=ADS[hash(n.link)%ADS.length].s}};
+  if(n.image){im.src=n.image;im.onerror=()=>{im.onerror=null;fb()}}else fb();
+  th.append(im);
+  const bd=el("div","bd"),tg=el("div","tags");
+  tg.append(el("span","tag",LABEL[n.cat]||n.cat));
+  if(NEWSET.has(n.link)&&!READ.has(n.link))tg.append(el("span","tag new","Nouveau"));
+  bd.append(tg,el("h3",null,n.title),el("div","meta",(n.source||"")+(n.date?" · "+new Date(n.date).toLocaleString("fr-FR",{dateStyle:"short",timeStyle:"short"}):"")),el("span","go","ACCÉDER ▸"));
+  a.append(th,bd);
+  const s=el("button","star");s.setAttribute("aria-label","Favori");
+  const paint=()=>{const on=isFav(n.link);s.textContent=on?"★":"☆";s.classList.toggle("on",on)};paint();
+  s.onclick=e=>{e.preventDefault();e.stopPropagation();toggleFav(n);if(cat=="fav")draw();else paint()};
+  const sh=el("button","share","⇪");sh.setAttribute("aria-label","Partager");sh.onclick=e=>{e.preventDefault();e.stopPropagation();share(n)};
+  c.append(a,s,sh);return c;
+}
 function draw(){
   const L=$("list");L.innerHTML="";
+  if(cat=="cal")return drawCal(L);
+  if(cat=="live")return drawLive(L);
+  if(cat=="quiz")return drawQuiz(L);
+  if(cat=="vid"){
+    const d=VIDS.filter(match);$("st").textContent=d.length?"":(VIDS.length?"Aucun résultat.":"Chargement des vidéos…");
+    d.forEach(n=>L.append(videoCard(n)));return;
+  }
+  const shelf=!Q&&cat=="dérivés"?shopShelf():!Q&&cat=="univers"?uniShelf():null;
   let d;
-  const shelf=cat=="dérivés"?shopShelf():cat=="univers"?uniShelf():null;
-  if(cat=="fav"){d=favs();$("st").textContent=d.length?"":"Aucun favori pour l'instant. Appuie sur ☆ sur un article pour le garder ici."}
-  else{d=DATA.filter(a=>cat=="tout"||a.cat==cat);$("st").textContent=shelf?"":(d.length?"":(DATA.length?"Rien de neuf dans cet onglet pour l'instant.":""))}
+  if(cat=="fav"){d=favs().filter(match);$("st").textContent=d.length?"":(Q?"Aucun résultat.":"Aucun favori pour l'instant. Appuie sur ☆ sur un article pour le garder ici.")}
+  else{d=DATA.filter(a=>(cat=="tout"||a.cat==cat)&&match(a));$("st").textContent=shelf?"":(d.length?"":(DATA.length?(Q?"Aucun résultat.":"Rien de neuf dans cet onglet pour l'instant."):""))}
   if(shelf){L.append(shelf,el("div","sh","Actus récentes"));if(!d.length)L.append(el("div","none",DATA.length?"Aucune actu récente dans cet onglet pour l'instant.":"Chargement des actus…"))}
-  d.forEach(n=>{
-    const card=document.createElement("div");card.className="card";
-    const a=document.createElement("a");a.className="lk";a.href=n.link;a.target="_blank";a.rel="noopener";
-    const th=document.createElement("div");th.className="th";
-    const im=document.createElement("img");im.alt="";im.loading="lazy";im.referrerPolicy="no-referrer";
-    const fb=()=>{if(ADS.length){th.classList.add("fb");im.src=ADS[hash(n.link)%ADS.length].s}};
-    if(n.image){im.src=n.image;im.onerror=()=>{im.onerror=null;fb()}}else fb();
-    th.append(im);
-    const bd=document.createElement("div");bd.className="bd";
-    const tg=document.createElement("span");tg.className="tag";tg.textContent=LABEL[n.cat]||n.cat;
-    const h=document.createElement("h3");h.textContent=n.title;
-    const m=document.createElement("div");m.className="meta";
-    m.textContent=(n.source||"")+(n.date?" · "+new Date(n.date).toLocaleString("fr-FR",{dateStyle:"short",timeStyle:"short"}):"");
-    const g=document.createElement("span");g.className="go";g.textContent="ACCÉDER ▸";
-    bd.append(tg,h,m,g);a.append(th,bd);
-    const s=document.createElement("button");s.className="star";s.setAttribute("aria-label","Favori");
-    const paint=()=>{const on=isFav(n.link);s.textContent=on?"★":"☆";s.classList.toggle("on",on)};paint();
-    s.onclick=e=>{e.preventDefault();e.stopPropagation();toggleFav(n);if(cat=="fav")draw();else paint()};
-    card.append(a,s);L.append(card);
-  });
+  d.forEach(n=>L.append(card(n)));
 }
-/* chargement : 4 groupes de sources, affichés au fur et à mesure */
+/* chargement : 4 groupes de sources */
 function norm(t){return(t||"").toLowerCase().replace(/[^a-z0-9]/g,"")}
 function dedupe(arr){
   const sl=new Set(),st=new Set();
@@ -232,31 +428,45 @@ async function getPart(i){
   const d=await r.json();const items=Array.isArray(d)?d:d.items;if(!Array.isArray(items))throw new Error("Réponse inattendue");
   return{items,parts:Array.isArray(d)?1:(d.parts||1)};
 }
+function finishKnown(){
+  const known=ls("nc_known",null);
+  const cur=DATA.map(a=>a.link);
+  if(Array.isArray(known)&&known.length)NEWSET=new Set(cur.filter(l=>!known.includes(l)));
+  lset("nc_known",[...new Set(cur.concat(known||[]))].slice(0,500));
+}
 async function load(){
   if(loading)return;loading=true;
   const OLD=DATA,fresh=[];let done=0,total=4,err="";
-  const upd=()=>{DATA=dedupe(fresh.concat(OLD));tabsUI();draw();
+  const upd=()=>{DATA=dedupe(fresh.concat(OLD));tabsUI();if(["tout","jeu","série","tcg","univers","dérivés"].includes(cat))draw();
     if(!DATA.length)$("st").textContent=done<total?"Chargement des sources… "+done+"/"+total:"Aucune actu Cyberpunk 2077 trouvée pour l'instant."};
   try{
     try{const f=await getPart(0);total=f.parts;fresh.push(...f.items)}catch(e){err=e&&e.message?e.message:String(e)}
     done=1;upd();
     await Promise.all(Array.from({length:Math.max(0,total-1)},(_,k)=>getPart(k+1).then(p=>{fresh.push(...p.items)}).catch(e=>{err=err||(e&&e.message?e.message:String(e))}).then(()=>{done++;upd()})));
-    if(fresh.length){DATA=dedupe(fresh.slice());tabsUI();draw();try{localStorage.setItem("nc_data3",JSON.stringify(DATA))}catch(e){}}
+    if(fresh.length){DATA=dedupe(fresh.slice());finishKnown();tabsUI();if(!["live","cal","quiz","vid"].includes(cat))draw();lset("nc_data3",DATA)}
     else if(!OLD.length)$("st").textContent="Signal perdu : "+(err||"aucune réponse")+" | API = "+API;
   }finally{loading=false}
 }
-try{const c=JSON.parse(localStorage.getItem("nc_data3")||"[]");if(Array.isArray(c)&&c.length){DATA=c}}catch(e){}
-tabsUI();draw();load();setInterval(load,600000);
-/* pubs défilantes (affiches) */
+const cached=ls("nc_data3",[]);if(Array.isArray(cached)&&cached.length)DATA=cached;
+/* recherche */
+$("sb").onclick=()=>{const o=$("sr").hidden;$("sr").hidden=!o;$("sb").classList.toggle("on",o);if(o)$("q").focus();else{Q="";$("q").value="";draw()}hh()};
+$("q").oninput=e=>{Q=e.target.value.trim().toLowerCase();draw()};
+tabsUI();draw();load();loadVids();loadStats();
+setInterval(load,600000);setInterval(()=>{if(cat=="live"&&!document.hidden)loadStats()},120000);
+$("tabs2").addEventListener("click",e=>{const b=e.target.closest("button");if(b&&b.dataset.k=="live"&&Date.now()-statsT>3e4){statsT=Date.now();loadStats()}});
+/* pubs défilantes : affiches + bannières texte */
+const CORPS=[["ARASAKA","L'avenir vous attend."],["MILITECH","Calibrés pour la liberté."],["TRAUMA TEAM","On arrive avant la fin."],["KANG TAO","Visez plus malin."],["DELAMAIN","Votre course, notre IA."],["BIOTECHNICA","Nourrir demain."],["KIROSHI","Voyez plus loin."],["AFTERLIFE","Là où naissent les légendes."]];
 (function(){
   if(!ADS.length){$("rail").style.display="none";document.querySelector("main").style.paddingLeft="12px";return}
   const track=$("track");
-  const order=ADS.slice().sort(()=>Math.random()-.5);
-  [0,1].forEach(()=>order.forEach(a=>{
-    const d=document.createElement("div");d.className="ad";
-    const i=document.createElement("img");i.src=a.s;i.alt=a.n;i.loading="lazy";d.append(i);
-    d.onclick=()=>{$("lbi").src=a.s;$("lbn").textContent=a.n;$("lbt").textContent=a.t;$("lb").classList.add("open")};
-    track.append(d)}));
+  const order=shuf(ADS),corps=shuf(CORPS);let ci=0;
+  [0,1].forEach(()=>{ci=0;order.forEach((a,i)=>{
+    const d=el("div","ad"),im=el("img");im.src=a.s;im.alt=a.n;im.loading="lazy";d.append(im);
+    const sp=corps[(i)%corps.length];
+    d.onclick=()=>{$("lbi").src=a.s;$("lbn").textContent=a.n;$("lbt").textContent=a.t;$("lbs").textContent="Sponsorisé par "+sp[0]+" — « "+sp[1]+" »";$("lb").classList.add("open")};
+    track.append(d);
+    if(i%3==2){const c=corps[ci++%corps.length],t=el("div","tad");t.append(el("b",null,c[0]),el("span",null,c[1]));track.append(t)}
+  })});
   track.addEventListener("pointerdown",()=>track.classList.add("paused"));
   ["pointerup","pointercancel","pointerleave"].forEach(ev=>track.addEventListener(ev,()=>track.classList.remove("paused")));
   $("lb").onclick=()=>$("lb").classList.remove("open");
