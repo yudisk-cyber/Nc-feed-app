@@ -181,6 +181,33 @@ details.rule li{margin-bottom:4px}
 .cd .bar{position:absolute;left:0;right:0;bottom:0;height:4px}
 .cd .no{position:absolute;top:2px;left:3px;font-size:9px;background:rgba(0,0,0,.7);padding:0 3px;color:var(--y)}
 .cd .co{position:absolute;top:2px;right:3px;font-size:10px;font-weight:700;background:rgba(0,0,0,.75);color:#fff;padding:0 4px}
+
+#lbx{margin-top:12px;display:flex;flex-direction:column;gap:8px;align-items:center}
+#lbx:empty{display:none}
+.stp{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:var(--t)}
+.stp button{width:36px;height:36px;background:none;border:1px solid var(--y);color:var(--y);font-size:20px;line-height:1}
+.stp b{min-width:22px;text-align:center;font-size:18px;color:var(--y)}
+.stp span{width:92px;text-align:right;color:var(--m);font-size:11px}
+.cd .ow,.cd .dk{position:absolute;bottom:6px;font-size:10px;font-weight:700;padding:0 4px;color:#000}
+.cd .ow{left:3px;background:#2bd96b}.cd .dk{right:3px;background:var(--c)}
+.cd.miss img{filter:grayscale(.85) brightness(.6)}
+.prog{height:6px;background:#222;margin:4px 0 6px}.prog i{display:block;height:100%;background:var(--y)}
+.pl{font-size:12px;color:var(--m);display:flex;gap:10px;flex-wrap:wrap}
+.dr{display:flex;align-items:center;gap:8px;background:var(--p);border-left:4px solid #555;padding:6px 8px;margin-bottom:6px}
+.dr .nm{flex:1;min-width:0;font-size:14px;line-height:1.2;overflow-wrap:anywhere}
+.dr .nm small{display:block;color:var(--m);font-size:11px}
+.dr .stp button{width:32px;height:32px}
+.ok2{color:#2bd96b}.ko2{color:var(--r)}
+.curve{display:flex;align-items:flex-end;gap:4px;height:64px;margin:6px 0 2px}
+.curve div{flex:1;background:var(--y);min-height:2px;position:relative}
+.curve div span{position:absolute;top:-14px;left:0;right:0;text-align:center;font-size:10px;color:var(--m)}
+.cl{display:flex;gap:4px;font-size:10px;color:var(--m)}.cl span{flex:1;text-align:center}
+.twr{display:flex;gap:10px;text-decoration:none;color:inherit;padding:7px 0;border-top:1px solid #262626}
+.twr:first-of-type{border-top:0}
+.twr img{width:110px;aspect-ratio:16/9;object-fit:cover;background:#000;flex:none}
+.twr h4{margin:0;font-size:13px;line-height:1.25;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.twr .meta{color:#c9a8ff}
+.live{display:inline-block;background:#e91916;color:#fff;font-size:9px;font-weight:700;padding:0 4px;letter-spacing:1px;margin-right:5px}
 </style></head><body>
 <header id="hd">
  <div class="top"><h1>Night City Feed<small>// CYBERPUNK 2077 · EN DIRECT</small></h1>
@@ -191,7 +218,7 @@ details.rule li{margin-bottom:4px}
 <nav id="nav"></nav>
 <aside id="rail"><div class="lab">PUBLICITÉ</div><div id="track"></div></aside>
 <main><div id="st">Connexion au réseau…</div><div id="list"></div></main>
-<div id="lb"><img id="lbi" alt=""><b id="lbn"></b><span id="lbt"></span><i id="lbs"></i></div>
+<div id="lb"><img id="lbi" alt=""><b id="lbn"></b><span id="lbt"></span><i id="lbs"></i><div id="lbx"></div></div>
 <div id="toast"></div>
 <button id="fab">▸ COMLINK</button>
 <section id="chat"><div id="ch"><span>// COMLINK</span><button id="close">FERMER</button></div><div id="log"></div>
@@ -205,7 +232,7 @@ const $=id=>document.getElementById(id);
 const ADS=window.ADS||[];
 const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"]];
 const NEWSCATS=["tout","jeu","série","tcg","univers","dérivés"];
-const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"]],plus:[["cal","Sorties"],["quiz","Quiz"]]};
+const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"]],plus:[["cal","Sorties"],["quiz","Quiz"]]};
 const NAV=[["actus","▤","Actus"],["vid","▶","Vidéos"],["live","●","Live"],["tcg","◈","TCG"],["plus","⋯","Plus"]];
 const LAST={actus:"tout",tcg:"tr",plus:"cal"};
 function secOf(c){for(const s in SEC)if(SEC[s].some(x=>x[0]==c))return s;return c}
@@ -240,7 +267,7 @@ function go(k){
   if(cat==k)return;
   cat=k;const s=secOf(k);if(LAST[s]!==undefined)LAST[s]=k;
   Q="";$("q").value="";tabsUI();draw();glitch();scrollTo(0,0);
-  if(k=="live"){if(Date.now()-statsT>3e4){statsT=Date.now();loadStats()}}
+  if(k=="live"){if(Date.now()-statsT>3e4){statsT=Date.now();loadStats();loadTwitch()}}
   if(k=="vid"&&!VIDS.length)loadVids(true);
 }
 function glitch(){const L=$("list");L.classList.remove("gl");void L.offsetWidth;L.classList.add("gl")}
@@ -363,6 +390,11 @@ function drawCal(L){
   L.append(el("div","sh","Déjà sorti"));past.forEach(e=>one(e,"past"));
 }
 /* live : joueurs Steam, prix, promos */
+let TW=null;
+async function loadTwitch(){
+  try{const r=await fetch(API+"/twitch",{cache:"no-cache"});if(!r.ok)throw 0;TW=await r.json()}catch(e){TW=TW||{configured:false,streams:[]}}
+  if(cat=="live")draw();
+}
 let STATS=null,statsT=0;
 async function loadStats(){
   try{const r=await fetch(API+"/stats",{cache:"no-cache"});if(!r.ok)throw 0;STATS=await r.json()}catch(e){STATS=STATS||{error:1}}
@@ -404,6 +436,14 @@ function drawLive(L){
   const tb=el("div","btnrow");
   [["Catégorie Cyberpunk 2077","https://www.twitch.tv/directory/category/cyberpunk-2077"],["CD PROJEKT RED","https://www.twitch.tv/cdprojektred"],["Rechercher « Cyberpunk »","https://www.twitch.tv/search?term=cyberpunk"]].forEach(([n,u])=>{const a=el("a","btn2 tw",n);a.href=u;a.target="_blank";a.rel="noopener";tb.append(a)});
   tp.append(tb);
+  if(TW&&TW.streams&&TW.streams.length){
+    tp.append(el("div","sh","En direct maintenant"));
+    TW.streams.forEach(s=>{const a=el("a","twr");a.href="https://www.twitch.tv/"+s.login;a.target="_blank";a.rel="noopener";
+      const im=el("img");im.alt="";im.loading="lazy";im.src=s.image;
+      const b=el("div");const h4=el("h4",null,s.title||"(sans titre)");const m=el("div","meta");m.append(el("span","live","LIVE"),document.createTextNode(s.name+" · "+Number(s.viewers).toLocaleString("fr-FR")+" spectateurs"+(s.lang=="fr"?" · 🇫🇷":"")));
+      b.append(h4,m);a.append(im,b);tp.append(a)});
+  }else if(TW&&TW.configured&&TW.error)tp.append(el("p","note","Twitch : "+TW.error+"."));
+  else if(TW&&TW.configured)tp.append(el("p","note","Aucun stream Cyberpunk 2077 en direct pour l'instant."));
   if(/^https?:$/.test(location.protocol)){
     const w=el("button","btn2 tw","▶ Regarder CD PROJEKT RED ici");w.style.marginTop="8px";
     w.onclick=()=>{const f=el("iframe","tv");f.src="https://player.twitch.tv/?channel=cdprojektred&parent="+location.hostname+"&muted=true&autoplay=false";f.allowFullscreen=true;w.replaceWith(f)};
@@ -455,7 +495,10 @@ const COL={r:["Rouge","#e0314b"],y:["Jaune","#fcee0a"],g:["Vert","#2bd96b"],b:["
 const RAR={c:"Commune",u:"Peu commune",r:"Rare",e:"Épique",s:"Secrète",i:"Iconique"};
 const TYP={l:"Légende",u:"Unité",g:"Équipement",p:"Programme"};
 const RORD="curesi",CORD="rygb",TORD="lugp";
-const TC={q:"",col:new Set(),rar:new Set(),typ:new Set(),grp:"none",srt:"num"};
+const OWN=ls('nc_own',{}),DECK=ls('nc_deck',{});
+const saveOwn=()=>lset('nc_own',OWN),saveDeck=()=>lset('nc_deck',DECK);
+const baseName=n=>n.replace(' (Iconique)','');
+const TC={own:'all',q:"",col:new Set(),rar:new Set(),typ:new Set(),grp:"none",srt:"num"};
 function cmpBy(k){
   const num=c=>parseInt(c.n,10)*10+(c.n.endsWith("b")?1:0);
   return{num:(a,b)=>num(a)-num(b),
@@ -463,6 +506,20 @@ function cmpBy(k){
    cout:(a,b)=>(a.cost==null)-(b.cost==null)||a.cost-b.cost,
    rar:(a,b)=>RORD.indexOf(a.r)-RORD.indexOf(b.r),
    col:(a,b)=>CORD.indexOf(a.c)-CORD.indexOf(b.c)}[k];
+}
+function stepper(label,get,set,max,onChange){
+  const d=el("div","stp");d.append(el("span",null,label));
+  const m=el("button",null,"−"),v=el("b",null,get()),p=el("button",null,"+");
+  const upd=()=>{v.textContent=get();onChange&&onChange()};
+  m.onclick=()=>{if(get()>0){set(get()-1);upd()}};p.onclick=()=>{if(get()<max){set(get()+1);upd()}};
+  d.append(m,v,p);return d;
+}
+function cardCtl(c){
+  const x=$("lbx");x.innerHTML="";
+  const refresh=()=>{if(cat=="tc")renderCards();else if(cat=="td")draw()};
+  x.append(stepper("Collection",()=>OWN[c.n]||0,v=>{v?OWN[c.n]=v:delete OWN[c.n];saveOwn()},9,refresh));
+  const lg=c.t=="l";
+  x.append(stepper("Deck",()=>DECK[c.n]||0,v=>{v?DECK[c.n]=v:delete DECK[c.n];saveDeck()},lg?1:3,refresh));
 }
 function cardTile(c){
   const b=el("button","cd");b.setAttribute("aria-label",c.name);
@@ -473,19 +530,28 @@ function cardTile(c){
   const bar=el("div","bar");bar.style.background=col[1];
   b.append(ph,im,bar,el("span","no",c.n));
   if(c.cost!=null)b.append(el("span","co",c.cost));
-  b.onclick=()=>{$("lbi").src=CIMG+"large/wnc-"+c.n+".webp";$("lbi").onerror=()=>{$("lbi").onerror=null;$("lbi").src=CIMG+"wnc-"+c.n+".webp"};
+  if(OWN[c.n]>0)b.append(el("span","ow","×"+OWN[c.n]));
+  if(DECK[c.n]>0)b.append(el("span","dk","D"+DECK[c.n]));
+  if(Object.keys(OWN).length&&!(OWN[c.n]>0)&&TC.own!="all")b.classList.add("miss");
+  b.onclick=()=>{cardCtl(c);$("lbi").src=CIMG+"large/wnc-"+c.n+".webp";$("lbi").onerror=()=>{$("lbi").onerror=null;$("lbi").src=CIMG+"wnc-"+c.n+".webp"};
     $("lbn").textContent=c.name;$("lbt").textContent=col[0]+" · "+RAR[c.r]+" · "+TYP[c.t]+(c.cost!=null?" · coût "+c.cost:"");$("lbs").textContent="N° "+c.n;$("lb").classList.add("open")};
   return b;
 }
 function renderCards(){
   const g=$("cg");if(!g)return;g.innerHTML="";
   const q=TC.q.toLowerCase().split(/\s+/).filter(Boolean);
-  let d=CARDS.filter(c=>(!TC.col.size||TC.col.has(c.c))&&(!TC.rar.size||TC.rar.has(c.r))&&(!TC.typ.size||TC.typ.has(c.t))&&q.every(w=>c.name.toLowerCase().includes(w)));
+  let d=CARDS.filter(c=>(!TC.col.size||TC.col.has(c.c))&&(!TC.rar.size||TC.rar.has(c.r))&&(!TC.typ.size||TC.typ.has(c.t))&&q.every(w=>c.name.toLowerCase().includes(w))&&(TC.own=='all'||(TC.own=='own'&&OWN[c.n]>0)||(TC.own=='miss'&&!(OWN[c.n]>0))||(TC.own=='deck'&&DECK[c.n]>0)));
   const s=cmpBy(TC.srt);
   const grpKey={couleur:c=>CORD.indexOf(c.c),rareté:c=>RORD.indexOf(c.r),type:c=>TORD.indexOf(c.t)};
   const grpLab={couleur:c=>COL[c.c][0],rareté:c=>RAR[c.r],type:c=>TYP[c.t]};
   if(TC.grp!="none"){const k=grpKey[TC.grp];d.sort((a,b)=>k(a)-k(b)||s(a,b)||cmpBy("num")(a,b))}
   else d.sort((a,b)=>s(a,b)||cmpBy("num")(a,b));
+  const have=CARDS.filter(c=>OWN[c.n]>0).length;
+  $("pg").innerHTML="";
+  const pr=el("div","prog"),pi=el("i");pi.style.width=(have/CARDS.length*100)+"%";pr.append(pi);
+  const pl=el("div","pl");pl.append(el("span",null,"Collection : "+have+" / "+CARDS.length));
+  Object.keys(COL).forEach(k=>{const t=CARDS.filter(c=>c.c==k);const o=t.filter(c=>OWN[c.n]>0).length;const s=el("span",null,COL[k][0]+" "+o+"/"+t.length);s.style.color=COL[k][1];pl.append(s)});
+  $("pg").append(pr,pl);
   $("cc").textContent=d.length+" carte"+(d.length>1?"s":"")+" sur "+CARDS.length;
   let last=null;
   d.forEach(c=>{
@@ -493,12 +559,55 @@ function renderCards(){
     g.append(cardTile(c))});
   if(!d.length)g.append(el("div","none","Aucune carte ne correspond."));
 }
+function drawDeck(L){
+  $("st").textContent="";
+  const ids=Object.keys(DECK).filter(k=>DECK[k]>0),byId={};CARDS.forEach(c=>byId[c.n]=c);
+  const cs=ids.map(k=>byId[k]).filter(Boolean);
+  const leg=cs.filter(c=>c.t=="l"),main=cs.filter(c=>c.t!="l");
+  const nMain=main.reduce((s,c)=>s+DECK[c.n],0);
+  const legNames=new Set(leg.map(c=>baseName(c.name)));
+  const copies={};main.forEach(c=>{const k=baseName(c.name);copies[k]=(copies[k]||0)+DECK[c.n]});
+  const over=Object.keys(copies).filter(k=>copies[k]>3);
+  const cols=new Set(cs.map(c=>c.c));
+  const trackOwn=Object.keys(OWN).length>0;
+  const lack=trackOwn?cs.filter(c=>DECK[c.n]>(OWN[c.n]||0)):[];
+  const p=el("div","panel");
+  const line=(ok,t)=>{const d=el("div","row");d.append(el("span",ok?"ok2":"ko2",(ok?"✔ ":"✖ ")+t));p.append(d)};
+  p.append(el("div","lab","Mon deck"));
+  line(leg.length==3&&legNames.size==3,"Légendes : "+leg.length+" / 3 (noms différents)");
+  line(nMain>=40&&nMain<=50,"Cartes principales : "+nMain+" (40 à 50)");
+  line(!over.length,over.length?"Plus de 3 exemplaires : "+over.join(", "):"Pas plus de 3 exemplaires par carte");
+  const info=el("div","row");info.append(el("span",null,"Couleurs : "+(cols.size?[...cols].map(k=>COL[k][0]).join(", "):"—")+(cols.size>3?" (plus de 3 : OK en constructed selon la RAM, pas en Beta Sealed)":"")));p.append(info);
+  if(trackOwn)line(!lack.length,lack.length?"Pas assez en collection : "+lack.length+" carte(s)":"Tout est dans ta collection");
+  const cur=Array(10).fill(0);main.forEach(c=>{cur[Math.min(9,c.cost||0)]+=DECK[c.n]});const mx=Math.max(1,...cur);
+  const cv=el("div","curve");cur.forEach(n=>{const b=el("div");b.style.height=(n/mx*100)+"%";if(n)b.append(el("span",null,n));cv.append(b)});
+  const cl=el("div","cl");cur.forEach((_,i)=>cl.append(el("span",null,i==9?"9+":i)));
+  p.append(el("div","meta","Courbe de coût"),cv,cl);
+  L.append(p);
+  const bt=el("div","btnrow");
+  const ex=el("button","btn2","Copier la liste");ex.onclick=async()=>{
+    const t=["// Legendes"].concat(leg.map(c=>c.name+" ("+c.n+")"),["// Deck ("+nMain+")"],main.sort(cmpBy("num")).map(c=>DECK[c.n]+"x "+c.name+" ("+c.n+")")).join("\n");
+    try{await navigator.clipboard.writeText(t);toast("Liste copiée")}catch(e){prompt("Copie la liste :",t)}};
+  const rs=el("button","btn2","Vider le deck");rs.onclick=()=>{if(confirm("Vider tout le deck ?")){for(const k in DECK)delete DECK[k];saveDeck();draw()}};
+  bt.append(ex,rs);L.append(bt);
+  if(!cs.length){L.append(el("p","note","Deck vide. Va dans « Cartes », touche une carte et utilise le « + » de la ligne Deck pour l'ajouter."));return}
+  const sec=(t,arr)=>{if(!arr.length)return;L.append(el("div","sh",t));
+    arr.sort((a,b)=>cmpBy("cout")(a,b)||cmpBy("nom")(a,b)).forEach(c=>{
+      const r=el("div","dr");r.style.borderLeftColor=COL[c.c][1];
+      const nm=el("div","nm",c.name);nm.append(el("small",null,TYP[c.t]+" · "+RAR[c.r]+(c.cost!=null?" · coût "+c.cost:"")+(trackOwn?" · possédée ×"+(OWN[c.n]||0):"")));
+      nm.style.cursor="pointer";nm.onclick=()=>{cardCtl(c);$("lbi").src=CIMG+"large/wnc-"+c.n+".webp";$("lbn").textContent=c.name;$("lbt").textContent=COL[c.c][0]+" · "+RAR[c.r]+" · "+TYP[c.t];$("lbs").textContent="N° "+c.n;$("lb").classList.add("open")};
+      r.append(nm,stepper("",()=>DECK[c.n]||0,v=>{v?DECK[c.n]=v:delete DECK[c.n];saveDeck()},c.t=="l"?1:3,()=>draw()));L.append(r)})};
+  sec("Légendes",leg);sec("Unités",main.filter(c=>c.t=="u"));sec("Équipements",main.filter(c=>c.t=="g"));sec("Programmes",main.filter(c=>c.t=="p"));
+}
 function drawCards(L){
   $("st").textContent="";
   const ctl=el("div","ctl");
   const inp=el("input");inp.type="search";inp.placeholder="Nom de carte…";inp.value=TC.q;inp.oninput=()=>{TC.q=inp.value;renderCards()};ctl.append(inp);
   const row=(lab,items,set)=>{const r=el("div","fl");r.append(el("span",null,lab));
     items.forEach(([k,t])=>{const b=el("button","fc"+(set.has(k)?" on":""),t);b.onclick=()=>{set.has(k)?set.delete(k):set.add(k);b.classList.toggle("on");renderCards()};r.append(b)});ctl.append(r)};
+  const ro=el("div","fl");ro.append(el("span",null,"Mes cartes"));
+  [["all","Toutes"],["own","Possédées"],["miss","Manquantes"],["deck","Dans mon deck"]].forEach(([k,t])=>{const b=el("button","fc"+(TC.own==k?" on":""),t);b.onclick=()=>{TC.own=k;[...ro.querySelectorAll(".fc")].forEach(x=>x.classList.toggle("on",x===b));renderCards()};ro.append(b)});
+  ctl.append(ro);
   row("Couleur",Object.keys(COL).map(k=>[k,COL[k][0]]),TC.col);
   row("Rareté",Object.keys(RAR).map(k=>[k,RAR[k]]),TC.rar);
   row("Type",Object.keys(TYP).map(k=>[k,TYP[k]]),TC.typ);
@@ -506,9 +615,10 @@ function drawCards(L){
     opts.forEach(([v,t])=>{const o=el("option",null,t);o.value=v;if(TC[key]==v)o.selected=true;s.append(o)});s.onchange=()=>{TC[key]=s.value;renderCards()};r.append(s);return r};
   const fl=el("div","fl");fl.style.marginBottom="0";
   fl.append(sel("Grouper",[["none","Aucun"],["couleur","Couleur"],["rareté","Rareté"],["type","Type"]],"grp"),sel("Trier",[["num","N°"],["nom","Nom"],["cout","Coût"],["rar","Rareté"],["col","Couleur"]],"srt"));
-  const rs=el("button","fc","Réinitialiser");rs.onclick=()=>{TC.q="";TC.col.clear();TC.rar.clear();TC.typ.clear();TC.grp="none";TC.srt="num";draw()};fl.append(rs);
+  const rs=el("button","fc","Réinitialiser");rs.onclick=()=>{TC.q="";TC.own="all";TC.col.clear();TC.rar.clear();TC.typ.clear();TC.grp="none";TC.srt="num";draw()};fl.append(rs);
   ctl.append(fl);
   L.append(ctl);
+  const pg=el("div");pg.id="pg";L.append(pg);
   const cc=el("div","cnt");cc.id="cc";L.append(cc);
   const g=el("div");g.id="cg";L.append(g);
   L.append(el("p","note","Set « Welcome to Night City » · images : playdreamz.com · les cartes appartiennent à CD PROJEKT RED / WeirdCo. Touche une carte pour l'agrandir."));
@@ -586,6 +696,7 @@ function draw(){
   const L=$("list");L.innerHTML="";
   if(cat=="tr")return drawRules(L);
   if(cat=="tc")return drawCards(L);
+  if(cat=="td")return drawDeck(L);
   if(cat=="cal")return drawCal(L);
   if(cat=="live")return drawLive(L);
   if(cat=="quiz")return drawQuiz(L);
@@ -642,8 +753,8 @@ const cached=ls("nc_data3",[]);if(Array.isArray(cached)&&cached.length)DATA=cach
 /* recherche */
 $("sb").onclick=()=>{const o=$("sr").hidden;$("sr").hidden=!o;$("sb").classList.toggle("on",o);if(o)$("q").focus();else{Q="";$("q").value="";draw()}hh()};
 $("q").oninput=e=>{Q=e.target.value.trim().toLowerCase();draw()};
-tabsUI();draw();load();loadVids();loadStats();
-setInterval(load,600000);setInterval(()=>{if(cat=="live"&&!document.hidden)loadStats()},120000);
+tabsUI();draw();load();loadVids();loadStats();loadTwitch();
+setInterval(load,600000);setInterval(()=>{if(cat=="live"&&!document.hidden){loadStats();loadTwitch()}},120000);
 /* pubs défilantes : affiches + bannières texte */
 const CORPS=[["ARASAKA","L'avenir vous attend."],["MILITECH","Calibrés pour la liberté."],["TRAUMA TEAM","On arrive avant la fin."],["KANG TAO","Visez plus malin."],["DELAMAIN","Votre course, notre IA."],["BIOTECHNICA","Nourrir demain."],["KIROSHI","Voyez plus loin."],["AFTERLIFE","Là où naissent les légendes."]];
 (function(){
@@ -653,13 +764,13 @@ const CORPS=[["ARASAKA","L'avenir vous attend."],["MILITECH","Calibrés pour la 
   [0,1].forEach(()=>{ci=0;order.forEach((a,i)=>{
     const d=el("div","ad"),im=el("img");im.src=a.s;im.alt=a.n;im.loading="lazy";d.append(im);
     const sp=corps[(i)%corps.length];
-    d.onclick=()=>{$("lbi").src=a.s;$("lbn").textContent=a.n;$("lbt").textContent=a.t;$("lbs").textContent="Sponsorisé par "+sp[0]+" — « "+sp[1]+" »";$("lb").classList.add("open")};
+    d.onclick=()=>{$("lbx").innerHTML="";$("lbi").src=a.s;$("lbn").textContent=a.n;$("lbt").textContent=a.t;$("lbs").textContent="Sponsorisé par "+sp[0]+" — « "+sp[1]+" »";$("lb").classList.add("open")};
     track.append(d);
     if(i%3==2){const c=corps[ci++%corps.length],t=el("div","tad");t.append(el("b",null,c[0]),el("span",null,c[1]));track.append(t)}
   })});
   track.addEventListener("pointerdown",()=>track.classList.add("paused"));
   ["pointerup","pointercancel","pointerleave"].forEach(ev=>track.addEventListener(ev,()=>track.classList.remove("paused")));
-  $("lb").onclick=()=>$("lb").classList.remove("open");
+  $("lb").onclick=e=>{if(e.target.closest("#lbx"))return;$("lb").classList.remove("open")};
 })();
 addEventListener("resize",hh);
 /* comlink (optionnel) */
