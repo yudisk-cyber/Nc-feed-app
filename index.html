@@ -11,7 +11,7 @@
 body{margin:0;background:var(--bg);color:var(--t);font:15px/1.4 "Rajdhani","Segoe UI",Arial,sans-serif;padding-bottom:calc(var(--nh,54px) + 30px)}
 header{position:sticky;top:0;z-index:6;background:var(--bg);border-bottom:2px solid var(--y);padding:calc(8px + env(safe-area-inset-top)) 14px 8px}
 .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
-h1{margin:0;font-size:22px;letter-spacing:3px;color:var(--y);text-transform:uppercase}
+h1{margin:0;font-size:20px;letter-spacing:2px;color:var(--y);text-transform:uppercase}
 h1 small{display:block;font-size:11px;color:var(--m);letter-spacing:2px}
 #ad{background:none;border:1px solid var(--m);color:var(--t);height:34px;padding:0 8px;font:700 11px inherit;letter-spacing:1px}
 #ad.off{color:var(--m);text-decoration:line-through}
@@ -223,6 +223,14 @@ body.bd #nav{border-top-color:var(--c);box-shadow:0 0 14px rgba(0,240,255,.45)}
 @keyframes fl{0%,92%,100%{opacity:1}94%{opacity:.82}96%{opacity:1}98%{opacity:.88}}
 body.bd h1{animation:fl 5s infinite}
 @media(prefers-reduced-motion:reduce){body.bd h1{animation:none}}
+
+.tlb{position:relative;margin-left:8px;padding-left:16px;border-left:2px solid #333}
+.tle{position:relative;padding:0 0 18px}
+.tle::before{content:"";position:absolute;left:-23px;top:4px;width:12px;height:12px;border-radius:50%;background:var(--tc);box-shadow:0 0 8px var(--tc)}
+.tle.fut::before{background:#050505;border:2px solid var(--tc)}
+.tly{color:var(--tc);font-weight:700;letter-spacing:1px;font-size:13px;margin-bottom:3px}
+.tle h3{margin:4px 0 2px;font-size:16px;line-height:1.25}.tle p{margin:0;color:var(--m);font-size:13px}
+.tlt{position:relative;margin:2px 0 18px;color:#000;background:var(--c);font-weight:700;letter-spacing:1px;font-size:11px;padding:3px 8px;display:inline-block}
 </style></head><body>
 <header id="hd">
  <div class="top"><h1>Night City Feed<small>// CYBERPUNK 2077 · EN DIRECT</small></h1>
@@ -247,7 +255,7 @@ const $=id=>document.getElementById(id);
 const ADS=window.ADS||[];
 const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"]];
 const NEWSCATS=["tout","jeu","série","tcg","univers","dérivés"];
-const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"]],plus:[["cal","Sorties"],["quiz","Quiz"],["wk","Wiki"],["lx","Lexique"],["gd","Guides"],["wp","Fonds"],["pr","Progrès"],["bd","Braindance"]]};
+const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"]],plus:[["cal","Sorties"],["tl","Chronologie"],["quiz","Quiz"],["wk","Wiki"],["lx","Lexique"],["gd","Guides"],["wp","Fonds"],["pr","Progrès"],["bd","Braindance"]]};
 const NAV=[["actus","▤","Actus"],["vid","▶","Vidéos"],["live","●","Live"],["tcg","◈","TCG"],["plus","⋯","Plus"]];
 const LAST={actus:"tout",tcg:"tr",plus:"cal"};
 function secOf(c){for(const s in SEC)if(SEC[s].some(x=>x[0]==c))return s;return c}
@@ -383,7 +391,7 @@ function uniShelf(){
 const EVENTS=[
  {d:"2026-10-20",t:"Cyberpunk: Edgerunners 2",x:"Saison 2 de l'anime sur Netflix (10 épisodes)."},
  {d:"2026-10-22",t:"Mise à jour 2.5 « Edgerunners 2 Update »",x:"Contenu lié à la saison 2 dans Cyberpunk 2077."},
- {d:"2026-10-01",t:"Cyberpunk TCG — sortie en boutique",x:"Lancement commercial du jeu de cartes."},
+ {d:"2026-11-06",t:"Cyberpunk TCG — lancement en boutique",x:"Sortie mondiale de « Welcome to Night City » (préventes dès le 30 octobre)."},
  {d:"2026-12-10",t:"6 ans de Cyberpunk 2077",x:"Anniversaire de la sortie du jeu (10 décembre 2020)."},
  {w:"Printemps 2027",t:"Cyberpunk TCG — extension « Edgerunners: Burn Bright »",x:"Deuxième set du jeu de cartes."},
  {w:"Pas avant 2028",t:"Cyberpunk 2 (Project Orion)",x:"Toujours en pré-production selon CD PROJEKT RED."},
@@ -666,6 +674,52 @@ function drawBD(L){
 }
 setBD(!!ls("nc_bd",false));
 
+/* chronologie */
+const TLC={orig:["Origines","#8a8a8a"],jdr:["Jeu de rôle","#ff7a1a"],jeu:["Jeu vidéo","#fcee0a"],serie:["Série","#00f0ff"],tcg:["TCG","#b84dff"],futur:["À venir","#2bd96b"]};
+const TLE=[
+["1982-01-01","1982","orig","Blade Runner et Akira","Le film de Ridley Scott et le manga de Katsuhiro Otomo posent l'esthétique : villes denses, néons, pluie."],
+["1984-01-01","1984","orig","Neuromancien","Le roman de William Gibson invente le cyberespace et fixe les codes du genre."],
+["1988-01-01","1988","jdr","Cyberpunk, le jeu de rôle","Mike Pondsmith publie le jeu de rôle d'origine chez R. Talsorian Games. Night City y naît."],
+["1990-01-01","1990","jdr","Cyberpunk 2020","Deuxième édition du jeu de rôle, la plus connue des fans de la première heure."],
+["2005-01-01","2005","jdr","Cyberpunk v3.0","Nouvelle édition du jeu de rôle, située plus loin dans le futur."],
+["2012-05-30","Mai 2012","jeu","Annonce de Cyberpunk 2077","CD PROJEKT RED annonce son adaptation vidéoludique du jeu de rôle."],
+["2013-01-10","Janvier 2013","jeu","Premier teaser","Première vidéo du jeu, bien avant sa sortie."],
+["2018-06-09","2018","jeu","Première démo de gameplay","Le jeu se montre enfin en action."],
+["2019-06-09","Juin 2019","jeu","Keanu Reeves rejoint le projet","L'acteur est annoncé à l'E3 dans le rôle de Johnny Silverhand."],
+["2020-04-16","2020","jeu","Reports successifs","La sortie est repoussée plusieurs fois, avant d'être fixée au 10 décembre."],
+["2020-11-15","Novembre 2020","jdr","Cyberpunk RED","Nouvelle édition du jeu de rôle, publiée juste avant la sortie du jeu vidéo."],
+["2020-12-10","10 décembre 2020","jeu","Sortie de Cyberpunk 2077","Le jeu sort sur PC et consoles. Il est lancé avec de nombreux bugs sur les anciennes consoles."],
+["2020-12-18","Décembre 2020","jeu","Retrait de la PlayStation Store","Sony retire le jeu de sa boutique. Il y revient en juin 2021."],
+["2022-02-15","Février 2022","jeu","Mise à jour 1.5","Version pour consoles de nouvelle génération et nombreux correctifs."],
+["2022-08-15","Août 2022","jeu","Une suite est confirmée","CD PROJEKT RED confirme travailler sur une suite, nommée Project Orion."],
+["2022-09-13","13 septembre 2022","serie","Cyberpunk: Edgerunners","L'anime du Studio Trigger sort sur Netflix, 10 épisodes, et relance l'intérêt pour le jeu."],
+["2023-09-21","Septembre 2023","jeu","Mise à jour 2.0","Refonte des systèmes du jeu (compétences, cyberwares, police)."],
+["2023-09-26","26 septembre 2023","jeu","Phantom Liberty","L'extension à Dogtown, avec Idris Elba, sort le même mois que la mise à jour 2.0."],
+["2026-09-15","Septembre 2026","tcg","Version bêta du TCG","Le jeu de cartes se lance en bêta, avec des événements en boutique."],
+["2026-10-20","20 octobre 2026","serie","Edgerunners 2","La saison 2 de l'anime arrive sur Netflix, 10 épisodes d'un coup."],
+["2026-10-22","22 octobre 2026","jeu","Mise à jour 2.5","Contenu gratuit en jeu lié à la saison 2 d'Edgerunners."],
+["2026-11-06","6 novembre 2026","tcg","Cyberpunk TCG en boutique","Lancement mondial du set « Welcome to Night City »."],
+["2026-12-10","10 décembre 2026","jeu","6 ans du jeu","Anniversaire de la sortie de Cyberpunk 2077."],
+["2027-04-01","Printemps 2027","tcg","Edgerunners: Burn Bright","Deuxième set du jeu de cartes."],
+["2028-01-01","Pas avant 2028","futur","Cyberpunk 2 (Project Orion)","Toujours en pré-production selon CD PROJEKT RED."]
+];
+const TLF={f:"tout"};
+function drawTL(L){
+  $("st").textContent="";
+  L.append(el("p","note","Repères principaux de l'univers. Dates vérifiées pour la période 2022-2026 ; les autres sont des repères connus, à confirmer si besoin."));
+  const fr=el("div","chips");fr.style.marginBottom="10px";
+  const box=el("div","tlb");
+  const today=new Date().toISOString().slice(0,10);
+  const fill=()=>{box.innerHTML="";let marked=false;
+    TLE.filter(e=>TLF.f=="tout"||e[2]==TLF.f).forEach(e=>{
+      if(!marked&&e[0]>today){marked=true;const t=el("div","tlt","AUJOURD'HUI — "+new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"long",year:"numeric"}));box.append(t)}
+      const c=TLC[e[2]],r=el("div","tle"+(e[0]>today?" fut":""));r.style.setProperty("--tc",c[1]);
+      const tg=el("span","tag",c[0]);tg.style.background=c[1];
+      r.append(el("div","tly",e[1]),tg,el("h3",null,e[3]),el("p",null,e[4]));box.append(r)})};
+  ["tout"].concat(Object.keys(TLC)).forEach(k=>{const b=el("button","fc"+(TLF.f==k?" on":""),k=="tout"?"Tout":TLC[k][0]);b.onclick=()=>{TLF.f=k;[...fr.children].forEach(x=>x.classList.toggle("on",x===b));fill()};fr.append(b)});
+  L.append(fr,box);fill();
+}
+
 /* TCG : règles + liste des cartes */
 const RULES=[
  ["But du jeu",`<p>Tu gagnes si tu commences ton tour avec <b>7 Gigs</b> (dés) dans ta zone de Gigs. Tu ne gagnes pas à l'instant où tu prends le 7ᵉ : il faut le garder jusqu'au début de ton tour suivant.</p><p>Tu perds si tu dois piocher et que ton deck est vide.</p>`],
@@ -902,6 +956,7 @@ function draw(){
   if(cat=="wp")return drawWall(L);
   if(cat=="pr")return drawProg(L);
   if(cat=="bd")return drawBD(L);
+  if(cat=="tl")return drawTL(L);
   if(cat=="cal")return drawCal(L);
   if(cat=="live")return drawLive(L);
   if(cat=="quiz")return drawQuiz(L);
