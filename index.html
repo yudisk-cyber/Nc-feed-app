@@ -468,7 +468,7 @@ function cardTile(c){
   const b=el("button","cd");b.setAttribute("aria-label",c.name);
   const col=COL[c.c];
   const ph=el("div","ph",c.name);ph.style.background="#111";ph.style.color=col[1];
-  const im=el("img");im.alt=c.name;im.loading="lazy";im.referrerPolicy="no-referrer";
+  const im=el("img");im.alt=c.name;im.loading="lazy";
   im.decoding="async";let tried=0;im.onerror=()=>{if(!tried++)im.src=CIMG+"wnc-"+c.n+".webp";else im.remove()};im.src=CIMG+"large/wnc-"+c.n+".webp";
   const bar=el("div","bar");bar.style.background=col[1];
   b.append(ph,im,bar,el("span","no",c.n));
