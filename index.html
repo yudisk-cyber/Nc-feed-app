@@ -213,6 +213,16 @@ details.rule li{margin-bottom:4px}
 .twr h4{margin:0;font-size:13px;line-height:1.25;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .twr .meta{color:#c9a8ff}
 .live{display:inline-block;background:#e91916;color:#fff;font-size:9px;font-weight:700;padding:0 4px;letter-spacing:1px;margin-right:5px}
+
+/* mode braindance */
+body.bd::before{content:"";position:fixed;inset:0;z-index:50;pointer-events:none;background:repeating-linear-gradient(0deg,rgba(0,240,255,.05) 0 1px,transparent 1px 3px);mix-blend-mode:screen}
+body.bd h1,body.bd .big{text-shadow:0 0 8px rgba(252,238,10,.8),0 0 18px rgba(252,238,10,.4)}
+body.bd header{border-bottom-color:var(--c);box-shadow:0 0 14px rgba(0,240,255,.45)}
+body.bd .card,body.bd .uni,body.bd .shop,body.bd .panel,body.bd .vc{box-shadow:0 0 10px rgba(0,240,255,.12)}
+body.bd #nav{border-top-color:var(--c);box-shadow:0 0 14px rgba(0,240,255,.45)}
+@keyframes fl{0%,92%,100%{opacity:1}94%{opacity:.82}96%{opacity:1}98%{opacity:.88}}
+body.bd h1{animation:fl 5s infinite}
+@media(prefers-reduced-motion:reduce){body.bd h1{animation:none}}
 </style></head><body>
 <header id="hd">
  <div class="top"><h1>Night City Feed<small>// CYBERPUNK 2077 · EN DIRECT</small></h1>
@@ -237,7 +247,7 @@ const $=id=>document.getElementById(id);
 const ADS=window.ADS||[];
 const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"]];
 const NEWSCATS=["tout","jeu","série","tcg","univers","dérivés"];
-const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"]],plus:[["cal","Sorties"],["quiz","Quiz"]]};
+const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"]],plus:[["cal","Sorties"],["quiz","Quiz"],["wk","Wiki"],["lx","Lexique"],["gd","Guides"],["wp","Fonds"],["pr","Progrès"],["bd","Braindance"]]};
 const NAV=[["actus","▤","Actus"],["vid","▶","Vidéos"],["live","●","Live"],["tcg","◈","TCG"],["plus","⋯","Plus"]];
 const LAST={actus:"tout",tcg:"tr",plus:"cal"};
 function secOf(c){for(const s in SEC)if(SEC[s].some(x=>x[0]==c))return s;return c}
@@ -477,6 +487,185 @@ async function loadVids(force){
   vidTry=true;tabsUI();if(cat=="vid")draw();
 }
 const YT=[["CD PROJEKT RED","https://www.youtube.com/@CDPROJEKTRED"],["Cyberpunk 2077","https://www.youtube.com/@cyberpunkgame"],["Netflix Anime","https://www.youtube.com/@NetflixAnime"]];
+/* ===== Wiki, lexique, guides, fonds, progression, braindance ===== */
+const WIKI=[
+["Personnages","V","Mercenaire de Night City et héros du jeu. Ton passé (Nomade, Gamin des rues, Corpo) change le début de l'histoire. V porte le Relic, qui menace de le tuer."],
+["Personnages","Johnny Silverhand","Rockerboy légendaire du groupe Samurai et terroriste anti-Arasaka, mort en 2023. Son engramme vit dans le Relic, dans la tête de V. Il est joué par Keanu Reeves."],
+["Personnages","Jackie Welles","Meilleur ami et partenaire de V au début du jeu. Mercenaire loyal, proche des Valentinos et de Mama Welles."],
+["Personnages","Judy Álvarez","Technicienne de braindance, ex-membre des Mox. Elle monte des braindances pour le Clouds et peut devenir un intérêt romantique."],
+["Personnages","Panam Palmer","Nomade du clan Aldecaldos, mécanicienne et pilote. Elle devient une alliée centrale de V."],
+["Personnages","River Ward","Détective du NCPD, intègre et attaché à sa famille. Il peut devenir un intérêt romantique."],
+["Personnages","Kerry Eurodyne","Rockerboy et ancien membre de Samurai avec Johnny. Il vit désormais loin de la gloire de ses débuts."],
+["Personnages","Rogue Amendiares","Fixer légendaire de Night City, patronne du bar Afterlife. Elle a connu Johnny à l'époque de Samurai."],
+["Personnages","Goro Takemura","Ancien garde du corps de Saburo Arasaka. Il cherche à laver son honneur après l'assassinat de son maître."],
+["Personnages","Adam Smasher","Cyborg quasi entièrement mécanique au service d'Arasaka. Il est l'une des figures les plus dangereuses de la ville."],
+["Personnages","Alt Cunningham","Netrunneuse de génie, créatrice de Soulkiller et ancienne compagne de Johnny. Elle vit dans le Cyberespace."],
+["Personnages","Saburo, Yorinobu et Hanako Arasaka","La famille à la tête d'Arasaka : le fondateur Saburo, son fils Yorinobu et sa fille Hanako."],
+["Personnages","Viktor Vektor","Ripperdoc de Watson, un des rares médecins de confiance de V. Il a soigné la rue pendant des années."],
+["Personnages","Evelyn Parker","Joytoy qui propose à V et Jackie le braquage du Konpeki Plaza."],
+["Personnages","Solomon Reed","Agent des Nouveaux États-Unis dans l'extension Phantom Liberty. Il est joué par Idris Elba."],
+["Personnages","Songbird","Netrunneuse mystérieuse de Phantom Liberty, au cœur de l'intrigue de Dogtown."],
+["Gangs","Valentinos","Gang latino de Heywood, soudé par la famille, la foi et la fierté de la rue. Jackie en est issu."],
+["Gangs","Maelstrom","Gang obsédé par le chrome, qui pousse l'augmentation corporelle jusqu'à la folie."],
+["Gangs","Tyger Claws","Gang de Japantown, lié à la mode, au sexe et au crime organisé."],
+["Gangs","Voodoo Boys","Netrunners haïtiens de Pacifica, experts du Cyberespace et du Blackwall."],
+["Gangs","6th Street","Gang nationaliste de Heywood, formé d'anciens militaires de la rue."],
+["Gangs","Animals","Gang de culturistes ultra-augmentés, ceux des combats clandestins."],
+["Gangs","Wraiths","Clan nomade de pillards des Badlands."],
+["Gangs","Mox","Gang de protection des travailleuses du sexe de Watson."],
+["Gangs","Aldecaldos","Clan nomade soudé comme une famille, dirigé par Saul Bright. C'est celui de Panam."],
+["Corporations","Arasaka","Mégacorporation japonaise de la sécurité et de la finance. L'une des plus puissantes de Night City."],
+["Corporations","Militech","Géant américain de l'armement, rival historique d'Arasaka."],
+["Corporations","Kang Tao","Fabricant chinois d'armes intelligentes, spécialisé dans les armes connectées."],
+["Corporations","Biotechnica","Entreprise de biotechnologie et d'agriculture."],
+["Corporations","Trauma Team","Service d'urgence privé et très cher : les ambulances arrivent vite si on est assuré."],
+["Corporations","NetWatch","Organisation chargée de surveiller le Net et de le garder du Blackwall."],
+["Corporations","Zetatech","Fabricant d'implants et d'équipements cybernétiques."],
+["Lieux","Night City","Mégalopole de la Californie libre, vitrine du capitalisme sauvage et du chrome."],
+["Lieux","Watson","Quartier de Night City, avec les zones industrielles et le Little China."],
+["Lieux","Westbrook","Quartier riche et branché de Night City, avec Japantown."],
+["Lieux","Heywood","Quartier résidentiel populaire, territoire des Valentinos."],
+["Lieux","Pacifica","Quartier abandonné de Night City, aux mains des Voodoo Boys."],
+["Lieux","Santo Domingo","Quartier industriel de Night City."],
+["Lieux","Badlands","Désert à l'extérieur de la ville, territoire des nomades."],
+["Lieux","Dogtown","Zone fortifiée de l'extension Phantom Liberty, aux mains d'un seigneur de guerre."],
+["Lieux","Afterlife","Bar des mercenaires et des légendes, tenu par Rogue."],
+["Lieux","Konpeki Plaza","Hôtel de luxe et lieu du braquage qui lance l'intrigue."],
+["Technologie","Relic","Biopuce expérimentale d'Arasaka qui stocke les engrammes de Johnny et menace de remplacer V."],
+["Technologie","Cyberware","Les implants cybernétiques de Night City : plus on en a, plus on risque de perdre son humanité."],
+["Technologie","Braindance","Technologie qui permet de vivre les souvenirs d'un autre. Elle sert aux fixers, au divertissement et à l'enquête."],
+["Technologie","Blackwall","Barrière du Net qui sépare l'humanité d'IA rebelles et dangereuses."],
+["Technologie","Cyberpsychose","Trouble causé par un excès de chrome, qui pousse à la violence."],
+["Technologie","Soulkiller","Programme d'Alt qui copie la conscience d'une personne dans une IA."],
+["Technologie","Sandevistan","Implant qui ralentit le temps pour le porteur. Un classique des edgerunners."]
+];
+const LEX=[
+["Choom","Ami, pote.","« Salut, choom, ça roule ? »"],
+["Preem","Excellent, de grande qualité.","« Ce flingue est preem. »"],
+["Nova","Super, génial.","« C'était nova comme soirée. »"],
+["Gonk","Imbécile, nul.","« Quel gonk, il a laissé la porte ouverte. »"],
+["Delta","Partir vite.","« Il faut qu'on delta d'ici. »"],
+["Chrome","Les implants cybernétiques.","« Il a trop de chrome pour rester humain. »"],
+["Flatline","Tuer, ou être tué.","« On l'a flatliné. »"],
+["Eddies (€$)","La monnaie de Night City.","« Ça coûte mille eddies. »"],
+["Edgerunner","Mercenaire indépendant qui vit sur le fil.","« David est devenu un edgerunner. »"],
+["Fixer","Intermédiaire qui trouve des contrats pour les mercenaires.","« Rogue est une fixer légendaire. »"],
+["Gig","Un contrat de mercenaire.","« J'ai un gig pour toi. »"],
+["Ripperdoc","Médecin qui installe et répare des implants.","« Va voir Viktor, c'est le meilleur ripperdoc. »"],
+["Netrunner","Hackeur qui plonge dans le Net.","« Un netrunner a grillé mes caméras. »"],
+["Solo","Mercenaire spécialisé dans le combat.","« Un solo ne recule jamais. »"],
+["Nomade","Habitant des Badlands, vivant en clan.","« Les Aldecaldos sont des nomades. »"],
+["Corpo","Employé d'une mégacorporation, souvent péjoratif.","« Ces corpos se croient au-dessus de tout. »"],
+["Joytoy","Travailleur ou travailleuse du sexe de Night City.","« Evelyn est une joytoy. »"],
+["Braindance (BD)","Enregistrement de sensations qu'on revit.","« Judy monte des braindances. »"],
+["Cyberpsycho","Personne devenue folle par excès de chrome.","« Attention, c'est un cyberpsycho ! »"],
+["ICE","Protections qui défendent un réseau contre les intrusions.","« L'ICE de ce serveur est solide. »"],
+["Rockerboy","Artiste rebelle qui utilise sa musique pour porter un message.","« Johnny est un rockerboy. »"],
+["Corpo-rat","Insulte envers les gens des corporations.","« Dégage, corpo-rat ! »"]
+];
+function filterPage(L,key,items,cats,card,ph){
+  $("st").textContent="";
+  const S=filterPage.s=filterPage.s||{};const st=S[key]=S[key]||{q:"",c:"tout"};
+  const inp=el("input");inp.type="search";inp.placeholder=ph;inp.value=st.q;
+  inp.style.cssText="width:100%;background:#151515;border:1px solid #444;color:#e8e8e8;padding:8px 10px;font:inherit;margin-bottom:8px";
+  L.append(inp);
+  let cr=null;
+  if(cats){cr=el("div","chips");cr.style.marginBottom="10px";["tout"].concat(cats).forEach(c=>{const b=el("button","fc"+(st.c==c?" on":""),c=="tout"?"Tout":c);b.onclick=()=>{st.c=c;[...cr.children].forEach(x=>x.classList.toggle("on",x===b));fill()};cr.append(b)});L.append(cr)}
+  const box=el("div");L.append(box);
+  const fill=()=>{box.innerHTML="";
+    const q=st.q.toLowerCase().split(/\s+/).filter(Boolean);
+    const d=items.filter(i=>(st.c=="tout"||i[0]==st.c)&&q.every(w=>i.join(" ").toLowerCase().includes(w)));
+    if(!d.length)box.append(el("div","none","Aucun résultat."));
+    d.forEach(i=>box.append(card(i)))};
+  inp.oninput=()=>{st.q=inp.value;fill()};fill();
+}
+function drawWiki(L){
+  filterPage(L,"wiki",WIKI,["Personnages","Gangs","Corporations","Lieux","Technologie"],i=>{
+    const c=el("div","uni");c.append(el("div","meta",i[0]),el("h3",null,i[1]),el("p",null,i[2]));return c},"Rechercher dans le wiki…");
+  L.append(el("p","note","Résumés rédigés pour l'appli à partir de l'univers du jeu. Ils peuvent contenir de légers spoilers."));
+}
+function drawLex(L){
+  const items=LEX.map(a=>["Mot",a[0],a[1],a[2]]);
+  filterPage(L,"lex",items,null,i=>{
+    const c=el("div","uni");c.append(el("h3",null,i[1]),el("p",null,i[2]),el("p",null,i[3]));c.lastChild.style.cssText="color:#00f0ff;margin-top:4px";return c},"Rechercher un mot…");
+}
+const GUIDES=[
+["Builds","Netrunner","cyberpunk 2077 build netrunner guide"],
+["Builds","Solo / armes à feu","cyberpunk 2077 build solo guide"],
+["Builds","Furtivité et katana","cyberpunk 2077 build furtif katana guide"],
+["Builds","Techie / armes technologiques","cyberpunk 2077 build techie guide"],
+["Histoire","Toutes les fins du jeu","cyberpunk 2077 toutes les fins guide"],
+["Histoire","Quêtes manquables","cyberpunk 2077 quêtes manquables"],
+["Histoire","Romances : Judy, Panam, River, Kerry","cyberpunk 2077 romances guide"],
+["Histoire","Phantom Liberty : conseils","cyberpunk 2077 phantom liberty guide"],
+["Objets","Armes iconiques","cyberpunk 2077 armes iconiques emplacement"],
+["Objets","Cyberwares rares","cyberpunk 2077 meilleurs cyberwares"],
+["Objets","Véhicules à débloquer","cyberpunk 2077 véhicules à débloquer"],
+["Bonus","Easter eggs","cyberpunk 2077 easter eggs"],
+["Bonus","Succès et trophées","cyberpunk 2077 succès trophées guide"],
+["Bonus","Références dans Edgerunners","cyberpunk edgerunners références jeu"]
+];
+function drawGuides(L){
+  $("st").textContent="";
+  L.append(el("p","note","Recherches pré-remplies, pour trouver un guide à jour. Les résultats viennent de Google et YouTube."));
+  ["Builds","Histoire","Objets","Bonus"].forEach(cat=>{
+    L.append(el("div","sh",cat));
+    GUIDES.filter(g=>g[0]==cat).forEach(g=>{
+      const c=el("div","uni");c.append(el("h3",null,g[1]));
+      const ch=el("div","chips");
+      ch.append(chip("Google","https://www.google.com/search?q="+plus(g[2])+"&hl=fr"),chip("YouTube","https://www.youtube.com/results?search_query="+plus(g[2])));
+      c.append(ch);L.append(c)})});
+}
+function drawWall(L){
+  $("st").textContent="";
+  L.append(el("p","note","Les affiches de l'appli. Touche-en une, puis « Télécharger » pour l'enregistrer et l'utiliser comme fond d'écran."));
+  const g=el("div");g.id="cg";g.style.gridTemplateColumns="repeat(2,1fr)";
+  ADS.forEach(a=>{
+    const b=el("button","cd");b.style.aspectRatio="auto";const im=el("img");im.src=a.s;im.alt=a.n;im.style.cssText="position:static;height:auto";b.append(im);
+    b.onclick=()=>{$("lbi").src=a.s;$("lbn").textContent=a.n;$("lbt").textContent=a.t;$("lbs").textContent="";
+      const x=$("lbx");x.innerHTML="";const d=el("a","btn2","Télécharger");d.href=a.s;d.download=a.n.toLowerCase().replace(/[^a-z0-9]+/g,"-")+".webp";x.append(d);$("lb").classList.add("open")};
+    g.append(b)});
+  L.append(g);
+  L.append(el("div","sh","Fonds d'écran officiels"));
+  const c=el("div","chips");
+  c.append(chip("Rechercher sur Google","https://www.google.com/search?q="+plus("cyberpunk 2077 fond d'écran officiel")+"&tbm=isch"),chip("Site officiel","https://www.cyberpunk.net/"));
+  L.append(c);
+}
+const PROG=[
+["Histoire principale",["Terminer la quête principale","Voir la fin Arasaka","Voir la fin Panam (Aldecaldos)","Voir la fin Johnny et Rogue","Voir la fin secrète","Voir la fin « autre voie »"]],
+["Phantom Liberty",["Commencer Phantom Liberty","Terminer l'histoire de Dogtown","Voir une fin Phantom Liberty"]],
+["Relations",["Histoire de Jackie","Histoire de Judy","Histoire de Panam","Histoire de River","Histoire de Kerry","Histoire de Rogue"]],
+["Autour de Cyberpunk",["Regarder Edgerunners","Regarder la saison 2","Faire le quiz de l'appli","Compléter ma collection TCG rouge","Compléter ma collection TCG jaune","Compléter ma collection TCG verte","Compléter ma collection TCG bleue"]]
+];
+const PG=ls("nc_prog",{});
+function drawProg(L){
+  $("st").textContent="";
+  const all=PROG.flatMap(s=>s[1]),done=all.filter(t=>PG[t]).length,pct=Math.round(done/all.length*100);
+  const p=el("div","panel");p.append(el("div","lab","Ma progression"),el("div","big",pct+" %"),el("div","meta",done+" / "+all.length+" objectifs"));
+  const pr=el("div","prog"),pi=el("i");pi.style.width=pct+"%";pr.append(pi);p.append(pr);L.append(p);
+  PROG.forEach(([t,list])=>{
+    L.append(el("div","sh",t));
+    list.forEach(x=>{const r=el("div","dr");r.style.cursor="pointer";const on=!!PG[x];
+      r.style.borderLeftColor=on?"#2bd96b":"#555";
+      r.append(el("div","nm",(on?"✔  ":"☐  ")+x));
+      r.onclick=()=>{PG[x]?delete PG[x]:PG[x]=1;lset("nc_prog",PG);draw()};L.append(r)})});
+  const bt=el("div","btnrow");const rs=el("button","btn2","Tout décocher");rs.onclick=()=>{if(confirm("Tout décocher ?")){for(const k in PG)delete PG[k];lset("nc_prog",PG);draw()}};bt.append(rs);L.append(bt);
+}
+const STATIONS=["Radio Vexelstrom","Morro Rock Radio","Pacific Dreams","Radio PEBKAC","89.7 Growl FM","91.9 Royal Blue Radio","92.9 Impulse","95.2 Samizdat Radio","98.7 Body Heat Radio","99.9 Dark Star","101.9 The Dirge","107.5 Dance Dance Dance"];
+function setBD(on){document.body.classList.toggle("bd",on);lset("nc_bd",on)}
+function drawBD(L){
+  $("st").textContent="";
+  const p=el("div","panel");p.append(el("div","lab","Mode Braindance"),el("p","meta","Ambiance néon : lignes de balayage, lueurs et léger scintillement."));
+  const on=document.body.classList.contains("bd");
+  const b=el("button","btn2",on?"Désactiver":"Activer");b.onclick=()=>{setBD(!document.body.classList.contains("bd"));draw()};p.append(b);L.append(p);
+  L.append(el("div","sh","Radios de Night City"));
+  L.append(el("p","note","La musique du jeu est sous licence : les boutons ouvrent une recherche sur YouTube ou Spotify."));
+  STATIONS.forEach(s=>{const c=el("div","uni");c.append(el("h3",null,s));
+    const ch=el("div","chips");const q="Cyberpunk 2077 "+s;
+    ch.append(chip("YouTube","https://www.youtube.com/results?search_query="+plus(q)),chip("Spotify","https://open.spotify.com/search/"+enc(q)));c.append(ch);L.append(c)});
+}
+setBD(!!ls("nc_bd",false));
+
 /* TCG : règles + liste des cartes */
 const RULES=[
  ["But du jeu",`<p>Tu gagnes si tu commences ton tour avec <b>7 Gigs</b> (dés) dans ta zone de Gigs. Tu ne gagnes pas à l'instant où tu prends le 7ᵉ : il faut le garder jusqu'au début de ton tour suivant.</p><p>Tu perds si tu dois piocher et que ton deck est vide.</p>`],
@@ -707,6 +896,12 @@ function draw(){
   if(cat=="tr")return drawRules(L);
   if(cat=="tc")return drawCards(L);
   if(cat=="td")return drawDeck(L);
+  if(cat=="wk")return drawWiki(L);
+  if(cat=="lx")return drawLex(L);
+  if(cat=="gd")return drawGuides(L);
+  if(cat=="wp")return drawWall(L);
+  if(cat=="pr")return drawProg(L);
+  if(cat=="bd")return drawBD(L);
   if(cat=="cal")return drawCal(L);
   if(cat=="live")return drawLive(L);
   if(cat=="quiz")return drawQuiz(L);
