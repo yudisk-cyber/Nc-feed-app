@@ -230,6 +230,15 @@ body.bd h1{animation:fl 5s infinite}
 .tly{color:var(--tc);font-weight:700;letter-spacing:1px;font-size:13px;margin-bottom:3px}
 .tle h3{margin:4px 0 2px;font-size:16px;line-height:1.25}.tle p{margin:0;color:var(--m);font-size:13px}
 .tlt{position:relative;margin:2px 0 18px;color:#000;background:var(--c);font-weight:700;letter-spacing:1px;font-size:11px;padding:3px 8px;display:inline-block}
+
+.hub{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.ht{background:var(--p);border:1px solid #333;border-left:4px solid var(--y);color:var(--t);padding:12px 10px;text-align:left;font:inherit;display:flex;flex-direction:column;gap:3px;min-height:92px}
+.ht i{font-style:normal;font-size:24px;color:var(--y);line-height:1}
+.ht b{font-size:15px;letter-spacing:1px;text-transform:uppercase}
+.ht span{font-size:11px;color:var(--m);line-height:1.25}
+.ht:active{background:#222}
+.bk{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;border-bottom:1px solid #333;color:var(--c);font:inherit;padding:2px 0 8px;margin-bottom:10px;text-align:left;letter-spacing:1px}
+.bk b{color:var(--y);text-transform:uppercase;font-size:14px}
 </style></head><body>
 <header id="hd">
  <div class="top"><h1>Night City Feed<small>// CYBERPUNK 2077 · EN DIRECT</small></h1>
@@ -254,9 +263,9 @@ const $=id=>document.getElementById(id);
 const ADS=window.ADS||[];
 const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"]];
 const NEWSCATS=["tout","jeu","série","tcg","univers","dérivés"];
-const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"]],plus:[["cal","Sorties"],["tl","Chronologie"],["quiz","Quiz"],["wk","Wiki"],["lx","Lexique"],["gd","Guides"],["wp","Fonds"],["pr","Progrès"],["bd","Braindance"]]};
+const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"]],plus:[["hub","Plus"],["cal","Sorties"],["tl","Chronologie"],["quiz","Quiz"],["wk","Wiki"],["lx","Lexique"],["gd","Guides"],["wp","Fonds"],["pr","Progrès"],["bd","Braindance"]]};
 const NAV=[["actus","▤","Actus"],["vid","▶","Vidéos"],["live","●","Live"],["tcg","◈","TCG"],["plus","⋯","Plus"]];
-const LAST={actus:"tout",tcg:"tr",plus:"cal"};
+const LAST={actus:"tout",tcg:"tr",plus:"hub"};
 function secOf(c){for(const s in SEC)if(SEC[s].some(x=>x[0]==c))return s;return c}
 const inNews=()=>NEWSCATS.includes(cat);
 const LABEL={"jeu":"Jeu","série":"Série & film","tcg":"TCG & jeux de table","univers":"Univers","dérivés":"Produits dérivés","vidéo":"Vidéo"};
@@ -285,7 +294,7 @@ async function share(n){
 }
 /* onglets */
 function go(k,nav){
-  if(nav&&SEC[k])k=LAST[k];
+  if(nav&&SEC[k])k=k=="plus"?"hub":LAST[k];
   if(cat==k)return;
   cat=k;const s=secOf(k);if(LAST[s]!==undefined)LAST[s]=k;
   Q="";$("q").value="";tabsUI();draw();glitch();scrollTo(0,0);
@@ -294,7 +303,7 @@ function go(k,nav){
 }
 function glitch(){const L=$("list");L.classList.remove("gl");void L.offsetWidth;L.classList.add("gl")}
 function tabsUI(){
-  const T=$("tabs"),sec=secOf(cat),sub=SEC[sec];
+  const T=$("tabs"),sec=secOf(cat),sub=sec=="plus"?null:SEC[sec];
   if(!$("nav").children.length){
     NAV.forEach(([k,ic,l])=>{const b=el("button",null);b.dataset.k=k;b.append(el("i",null,ic),document.createTextNode(l),el("b"));b.onclick=()=>go(k,true);$("nav").append(b)});
     $("fv").onclick=()=>go(cat=="fav"?LAST.actus:"fav");
@@ -673,6 +682,25 @@ function drawBD(L){
 }
 setBD(!!ls("nc_bd",false));
 
+/* hub "Plus" */
+const HUB=[
+["Jouer",[["quiz","?","Quiz","10 questions sur Night City"],["pr","✔","Progrès","Ma liste d'objectifs"]]],
+["Savoir",[["wk","▤","Wiki","Personnages, gangs, corpos"],["lx","Aa","Lexique","L'argot de Night City"],["tl","❖","Chronologie","De 1982 à 2028"],["gd","➜","Guides","Builds, fins, astuces"]]],
+["Dates",[["cal","◷","Sorties","Décomptes et prochaines dates"]]],
+["Ambiance",[["wp","▨","Fonds","Affiches à télécharger"],["bd","◉","Braindance","Mode néon et radios"]]]
+];
+const PAGENAME={};HUB.forEach(g=>g[1].forEach(t=>PAGENAME[t[0]]=t[2]));
+function drawHub(L){
+  $("st").textContent="";
+  HUB.forEach(([t,items])=>{
+    L.append(el("div","sh",t));
+    const g=el("div","hub");
+    items.forEach(([k,ic,n,s])=>{const b=el("button","ht");b.append(el("i",null,ic),el("b",null,n),el("span",null,s));b.onclick=()=>go(k);g.append(b)});
+    L.append(g)});
+}
+function backBar(L){
+  const b=el("button","bk");b.append(el("span",null,"‹ Plus"),el("b",null,PAGENAME[cat]||""));b.onclick=()=>go("hub");L.append(b);
+}
 /* chronologie */
 const TLC={orig:["Origines","#8a8a8a"],jdr:["Jeu de rôle","#ff7a1a"],jeu:["Jeu vidéo","#fcee0a"],serie:["Série","#00f0ff"],tcg:["TCG","#b84dff"],futur:["À venir","#2bd96b"]};
 const TLE=[
@@ -946,6 +974,8 @@ function card(n){
 }
 function draw(){
   const L=$("list");L.innerHTML="";
+  if(cat=="hub")return drawHub(L);
+  if(secOf(cat)=="plus")backBar(L);
   if(cat=="tr")return drawRules(L);
   if(cat=="tc")return drawCards(L);
   if(cat=="td")return drawDeck(L);
