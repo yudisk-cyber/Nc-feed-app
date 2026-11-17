@@ -239,6 +239,7 @@ body.bd h1{animation:fl 5s infinite}
 <section id="chat"><div id="ch"><span>// COMLINK</span><button id="close">FERMER</button></div><div id="log"></div>
 <form id="f"><input id="in" placeholder="Écris ton message…" autocomplete="off"><button>ENVOYER</button></form></section>
 <script src="ads.js"></script>
+<script src="ads2.js"></script>
 <script>
 // >>> adresse de ton Worker <<<
 const API="https://nc-feed.lucasfigeac140702.workers.dev";
@@ -616,16 +617,39 @@ function drawGuides(L){
       ch.append(chip("Google","https://www.google.com/search?q="+plus(g[2])+"&hl=fr"),chip("YouTube","https://www.youtube.com/results?search_query="+plus(g[2])));
       c.append(ch);L.append(c)})});
 }
+const ADS2=window.ADS2||[];
+const AC=Object.assign({corpo:true,violent:true,sexy:true},ls("nc_adcats",{}));
+const WF={f:"tout"};
+const CATL={orig:"Originales",corpo:"Corpo",violent:"Violent",sexy:"Sexy"};
+function dlPoster(a){
+  const name=a.n.toLowerCase().replace(/[^a-z0-9]+/g,"-");
+  if(!a.s.startsWith("data:image/svg")){const l=el("a");l.href=a.s;l.download=name+".webp";document.body.append(l);l.click();l.remove();return}
+  const im=new Image();im.onload=()=>{const c=document.createElement("canvas");c.width=1200;c.height=1800;c.getContext("2d").drawImage(im,0,0,1200,1800);
+    c.toBlob(bl=>{const u=URL.createObjectURL(bl),l=el("a");l.href=u;l.download=name+".png";document.body.append(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000)},"image/png")};
+  im.onerror=()=>toast("Téléchargement impossible");im.src=a.s;
+}
 function drawWall(L){
   $("st").textContent="";
-  L.append(el("p","note","Les affiches de l'appli. Touche-en une, puis « Télécharger » pour l'enregistrer et l'utiliser comme fond d'écran."));
-  const g=el("div");g.id="cg";g.style.gridTemplateColumns="repeat(2,1fr)";
-  ADS.forEach(a=>{
-    const b=el("button","cd");b.style.aspectRatio="auto";const im=el("img");im.src=a.s;im.alt=a.n;im.style.cssText="position:static;height:auto";b.append(im);
-    b.onclick=()=>{$("lbi").src=a.s;$("lbn").textContent=a.n;$("lbt").textContent=a.t;$("lbs").textContent="";
-      const x=$("lbx");x.innerHTML="";const d=el("a","btn2","Télécharger");d.href=a.s;d.download=a.n.toLowerCase().replace(/[^a-z0-9]+/g,"-")+".webp";x.append(d);$("lb").classList.add("open")};
-    g.append(b)});
-  L.append(g);
+  L.append(el("p","note","Touche une affiche, puis « Télécharger » pour l'enregistrer et l'utiliser comme fond d'écran (PNG pour les nouvelles). Toutes les marques sont fictives."));
+  const all=ADS.map(a=>({...a,c:"orig"})).concat(ADS2);
+  const fr=el("div","chips");fr.style.marginBottom="10px";
+  const keys=["tout","orig","corpo","violent","sexy"];
+  const grid=el("div");grid.id="cg";grid.style.gridTemplateColumns="repeat(2,1fr)";
+  const fill=()=>{grid.innerHTML="";
+    all.filter(a=>WF.f=="tout"||a.c==WF.f).forEach(a=>{
+      const b=el("button","cd");b.style.aspectRatio="auto";const im=el("img");im.src=a.s;im.alt=a.n;im.loading="lazy";im.style.cssText="position:static;height:auto";b.append(im);
+      b.onclick=()=>{$("lbi").src=a.s;$("lbn").textContent=a.n;$("lbt").textContent=a.t;$("lbs").textContent="";
+        const x=$("lbx");x.innerHTML="";const d=el("button","btn2","Télécharger");d.onclick=()=>dlPoster(a);x.append(d);$("lb").classList.add("open")};
+      grid.append(b)})};
+  keys.forEach(k=>{const b=el("button","fc"+(WF.f==k?" on":""),k=="tout"?"Tout":CATL[k]);b.onclick=()=>{WF.f=k;[...fr.children].forEach(x=>x.classList.toggle("on",x===b));fill()};fr.append(b)});
+  L.append(fr,grid);fill();
+  if(ADS2.length){
+    L.append(el("div","sh","Pubs dans la colonne"));
+    L.append(el("p","note","Choisis les types d'affiches qui défilent sur le côté. Les affiches originales restent toujours affichées."));
+    const pc=el("div","chips");
+    ["corpo","violent","sexy"].forEach(k=>{const b=el("button","fc"+(AC[k]?" on":""),CATL[k]);b.onclick=()=>{AC[k]=!AC[k];lset("nc_adcats",AC);b.classList.toggle("on",AC[k]);toast("Pris en compte au prochain rechargement")};pc.append(b)});
+    L.append(pc);
+  }
   L.append(el("div","sh","Fonds d'écran officiels"));
   const c=el("div","chips");
   c.append(chip("Rechercher sur Google","https://www.google.com/search?q="+plus("cyberpunk 2077 fond d'écran officiel")+"&tbm=isch"),chip("Site officiel","https://www.cyberpunk.net/"));
@@ -978,7 +1002,7 @@ const CORPS=[["ARASAKA","L'avenir vous attend."],["MILITECH","Calibrés pour la 
 (function(){
   if(!ADS.length){$("rail").style.display="none";document.querySelector("main").style.paddingLeft="12px";return}
   const track=$("track");
-  const order=shuf(ADS),corps=shuf(CORPS);let ci=0;
+  const order=shuf(ADS.concat(ADS2.filter(a=>AC[a.c]!==false))),corps=shuf(CORPS);let ci=0;
   [0,1].forEach(()=>{ci=0;order.forEach((a,i)=>{
     const d=el("div","ad"),im=el("img");im.src=a.s;im.alt=a.n;im.loading="lazy";d.append(im);
     const sp=corps[(i)%corps.length];
