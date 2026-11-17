@@ -920,6 +920,7 @@ function draw(){
   if(cat=="fav"){d=favs().filter(match);$("st").textContent=d.length?"":(Q?"Aucun résultat.":"Aucun favori pour l'instant. Appuie sur ☆ sur un article pour le garder ici.")}
   else{d=DATA.filter(a=>(cat=="tout"||a.cat==cat)&&match(a));$("st").textContent=shelf?"":(d.length?"":(DATA.length?(Q?"Aucun résultat.":"Rien de neuf dans cet onglet pour l'instant."):""))}
   if(shelf){L.append(shelf,el("div","sh","Actus récentes"));if(!d.length)L.append(el("div","none",DATA.length?"Aucune actu récente dans cet onglet pour l'instant.":"Chargement des actus…"))}
+  if(trWarn&&d.some(n=>n.orig&&n.title===n.orig))L.prepend(el('p','note','Traduction indisponible pour certains titres (quota gratuit de l\'IA atteint). Ils repasseront en français dès que possible.'));
   d.forEach(n=>L.append(card(n)));
 }
 /* chargement : 4 groupes de sources */
@@ -929,11 +930,20 @@ function dedupe(arr){
   return arr.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).filter(a=>{
     const k=norm(a.orig||a.title);if(sl.has(a.link)||st.has(k))return false;sl.add(a.link);st.add(k);return true}).slice(0,250);
 }
-let loading=false;
+let loading=false,trWarn=false;
+const TRM=ls("nc_tr",{});
+function trFix(n){
+  if(n.orig&&n.title!==n.orig){if(TRM[n.link]!==n.title){TRM[n.link]=n.title;trDirty=1}}
+  else if(TRM[n.link]){n.title=TRM[n.link]}
+  return n;
+}
+let trDirty=0;
+function trSave(){if(!trDirty)return;trDirty=0;const k=Object.keys(TRM);if(k.length>800)k.slice(0,k.length-800).forEach(x=>delete TRM[x]);lset("nc_tr",TRM)}
 async function getPart(i){
   const r=await fetch(API+"/news?part="+i,{cache:"no-cache"});if(!r.ok)throw new Error("HTTP "+r.status);
   const d=await r.json();const items=Array.isArray(d)?d:d.items;if(!Array.isArray(items))throw new Error("Réponse inattendue");
-  return{items,parts:Array.isArray(d)?1:(d.parts||1)};
+  if(d.tr&&d.tr.ok===false)trWarn=true;
+  return{items:items.map(trFix),parts:Array.isArray(d)?1:(d.parts||1)};
 }
 function finishKnown(){
   const known=ls("nc_known",null);
@@ -950,7 +960,7 @@ async function load(){
     try{const f=await getPart(0);total=f.parts;fresh.push(...f.items)}catch(e){err=e&&e.message?e.message:String(e)}
     done=1;upd();
     await Promise.all(Array.from({length:Math.max(0,total-1)},(_,k)=>getPart(k+1).then(p=>{fresh.push(...p.items)}).catch(e=>{err=err||(e&&e.message?e.message:String(e))}).then(()=>{done++;upd()})));
-    if(fresh.length){DATA=dedupe(fresh.slice());finishKnown();tabsUI();if(inNews()||cat=="fav")draw();lset("nc_data3",DATA)}
+    if(fresh.length){DATA=dedupe(fresh.slice());finishKnown();tabsUI();if(inNews()||cat=="fav")draw();lset("nc_data3",DATA);trSave()}
     else if(!OLD.length)$("st").textContent="Signal perdu : "+(err||"aucune réponse")+" | API = "+API;
   }finally{loading=false}
 }
