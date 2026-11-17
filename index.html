@@ -34,6 +34,21 @@ main{padding:12px 12px 12px calc(var(--rail) + 12px)}
 .card h3{margin:0;font-size:15px;line-height:1.25;overflow-wrap:anywhere}
 .meta{font-size:11px;color:var(--m)}
 .go{color:var(--c);font-size:11px;letter-spacing:1px}
+.sh{color:var(--y);letter-spacing:2px;font-size:12px;margin:16px 0 8px;text-transform:uppercase;border-bottom:1px solid #333;padding-bottom:4px}
+.sh:first-child{margin-top:0}
+.none{color:var(--m);font-size:13px;padding:6px 0 12px}
+.note{color:var(--m);font-size:11px;margin:0 0 10px}
+.shop,.uni{display:block;background:var(--p);border-left:4px solid var(--y);padding:10px;margin-bottom:8px;text-decoration:none;color:inherit}
+.uni{border-left-color:var(--c)}
+.shop:active{background:#222}
+.shop .tag{background:var(--c)}
+.shop h3,.uni h3{margin:3px 0 2px;font-size:15px;line-height:1.25}
+.shop p,.uni p{margin:0;color:var(--m);font-size:12px}
+.uni .meta{color:var(--c);letter-spacing:1px;text-transform:uppercase;font-size:10px}
+.sub{color:var(--t);font-size:13px;margin:10px 0 5px;letter-spacing:1px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{border:1px solid var(--m);color:var(--t);text-decoration:none;font-size:12px;padding:4px 9px;letter-spacing:1px;text-transform:uppercase}
+.chip:active{background:var(--y);color:#000}
 /* pubs déroulantes à gauche */
 #rail{position:fixed;left:0;top:var(--hh);bottom:0;width:var(--rail);background:#050505;border-right:2px solid var(--y);overflow:hidden;z-index:4}
 #rail .lab{position:absolute;top:0;left:0;right:0;z-index:2;background:var(--y);color:#000;font-size:9px;letter-spacing:2px;text-align:center;padding:2px 0;font-weight:700}
@@ -101,12 +116,88 @@ function tabsUI(){
   });
   hh();
 }
+/* étagères : où acheter (produits dérivés) et univers cyberpunk */
+const enc=encodeURIComponent,plus=q=>enc(q.trim()).replace(/%20/g,"+"),dash=q=>enc(q.trim().replace(/\s+/g,"-"));
+const STORES={
+ amz:["Amazon",q=>"https://www.amazon.fr/s?k="+plus(q)],
+ fnac:["Fnac",q=>"https://www.fnac.com/SearchResult/ResultList.aspx?Search="+plus(q)],
+ ebay:["eBay",q=>"https://www.ebay.fr/sch/i.html?_nkw="+plus(q)],
+ etsy:["Etsy",q=>"https://www.etsy.com/fr/search?q="+plus(q)],
+ ali:["AliExpress",q=>"https://fr.aliexpress.com/w/wholesale-"+dash(q)+".html"],
+ cdis:["Cdiscount",q=>"https://www.cdiscount.com/search/10/"+plus(q)+".html"],
+ rak:["Rakuten",q=>"https://fr.shopping.rakuten.com/search/"+plus(q)],
+ gs:["Google Shopping",q=>"https://www.google.com/search?tbm=shop&q="+plus(q)],
+ dis:["Discogs",q=>"https://www.discogs.com/search/?type=all&q="+plus(q)]
+};
+const FEATURED=[
+ ["Boutique officielle","CD PROJEKT RED Gear (Europe)","Figurines, vêtements et goodies : la boutique du studio.","https://eu.gear.cdprojektred.com/"],
+ ["Statue","Adam Smasher — statue PVC","Édition officielle sur la boutique CD PROJEKT RED.","https://eu.gear.cdprojektred.com/en-na/products/cyberpunk-2077-adam-smasher-pvc-statue"],
+ ["Figurine","Songbird — figurine Dark Horse","Figurine Cyberpunk 2077 chez Dark Horse Direct.","https://darkhorsedirect.com/products/cyberpunk-2077-songbird-figure"],
+ ["Statue","Johnny Silverhand — statue PVC 24 cm","Chez Gundam Store.","https://gundam-store.com/products/cyberpunk-2077-pvc-statue-johnny-silverhand-24-cm"],
+ ["Collector","Jackie Welles — Dark Horse Comics","Figurine de collection chez Sideshow.","https://www.sideshow.com/collectibles/cyberpunk-2077-jackie-welles-dark-horse-comics-907043"],
+ ["Rayon complet","Statues & bustes Cyberpunk 2077","Tous les modèles chez Entertainment Earth.","https://www.entertainmentearth.com/s/cyberpunk-2077/statues-and-busts/tp"],
+ ["Edgerunners","Collection Edgerunners — Good Smile Europe","Nendoroid et figurines de l'anime.","https://goodsmileeurope.com/collections/cyberpunk-edgerunners"],
+ ["Nendoroid","David Martinez — Nendoroid","Figurine articulée de l'anime, chez HLJ.","https://www.hlj.com/nendoroid-david-cyberpunk-edgerunners-gsc17436"],
+ ["Nendoroid","Lucy — Nendoroid","Figurine articulée de l'anime, chez HLJ.","https://www.hlj.com/nendoroid-lucy-cyberpunk-edgerunners-gsc17396"],
+ ["Figurine","V (femme) — figurine","Chez Gamekastle.","https://gamekastle.com/products/cyberpunk-2077-female-v-figure"]
+];
+const SHOP_TYPES=[
+ ["Figurines & statues","cyberpunk 2077 figurine",["amz","fnac","ebay","etsy","ali","gs"]],
+ ["Figurines Edgerunners","cyberpunk edgerunners figurine",["amz","ebay","ali","etsy","gs"]],
+ ["Éditions collector & jeux","cyberpunk 2077 edition collector",["amz","fnac","cdis","rak","ebay"]],
+ ["Vêtements & goodies","cyberpunk 2077 hoodie t-shirt",["amz","etsy","ali","ebay","gs"]],
+ ["Artbooks, comics & mangas","cyberpunk 2077 artbook comics",["amz","fnac","ebay","rak"]],
+ ["Vinyles & musique","cyberpunk 2077 vinyl",["dis","amz","fnac","ebay"]],
+ ["Jeux de cartes & de société","cyberpunk jeu de cartes jeu de société",["amz","fnac","ebay","gs"]]
+];
+const UNIVERSES=[
+ ["Akira","Manga 1982 · film 1988","Neo-Tokyo, motards, pouvoirs psychiques : le monument de Katsuhiro Otomo.","Akira manga","Akira manga film","Akira manga"],
+ ["Neuromancien","Roman 1984","Le roman de William Gibson qui a fixé les codes du genre : cyberespace, hackers, IA.","Neuromancien","Neuromancer William Gibson","Neuromancien William Gibson"],
+ ["Blade Runner","Film 1982 · 2049","Los Angeles pluvieux, réplicants et chasseurs de primes, d'après Philip K. Dick.","Blade Runner","Blade Runner","Blade Runner"],
+ ["Ghost in the Shell","Manga 1989 · anime","Cyborgs, esprit et corps numérisés, dans la police du futur de Masamune Shirow.","Ghost in the Shell","Ghost in the Shell","Ghost in the Shell"],
+ ["Cyberpunk (jeu de rôle)","Jeu de table · Mike Pondsmith","Le jeu de rôle d'origine, dont Cyberpunk 2077 est tiré. Dernière édition : Cyberpunk RED.","Cyberpunk jeu de rôle","Cyberpunk RED","Cyberpunk RED jeu de rôle"],
+ ["Shadowrun","Jeu de rôle 1989","Cyberpunk mélangé à la fantasy : magie, elfes et mégacorporations.","Shadowrun","Shadowrun","Shadowrun jeu de rôle"],
+ ["Altered Carbon","Roman 2002 · série Netflix","Les consciences se sauvegardent dans des « piles » et changent de corps.","Altered Carbon","Altered Carbon","Altered Carbon"],
+ ["Deus Ex","Jeu vidéo 2000","Complots, augmentations et choix du joueur dans un futur proche.","Deus Ex","Deus Ex","Deus Ex"],
+ ["Snow Crash","Roman 1992","Le « Samouraï virtuel » de Neal Stephenson : métavers, pizza mafieuse et virus mental.","Snow Crash","Snow Crash","Snow Crash Neal Stephenson"],
+ ["Cyberpunk : Edgerunners","Anime 2022 · Studio Trigger","L'anime de l'univers de Cyberpunk 2077 : David, Lucy et les mercenaires de Night City.","Cyberpunk: Edgerunners","Cyberpunk Edgerunners","Cyberpunk Edgerunners"]
+];
+function el(t,c,x){const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e}
+function chip(label,href){const a=el("a","chip",label);a.href=href;a.target="_blank";a.rel="noopener";return a}
+function shopShelf(){
+  const f=document.createDocumentFragment();
+  f.append(el("div","sh","Où acheter — sélection"));
+  f.append(el("p","note","Liens vers des boutiques en ligne (non affiliées). Prix et stocks varient, vérifie sur le site."));
+  FEATURED.forEach(([tg,t,d,u])=>{
+    const a=el("a","shop");a.href=u;a.target="_blank";a.rel="noopener";
+    a.append(el("span","tag",tg),el("h3",null,t),el("p",null,d),el("span","go","ACHETER ▸"));f.append(a)});
+  f.append(el("div","sh","Chercher par type de produit"));
+  SHOP_TYPES.forEach(([t,q,st])=>{
+    f.append(el("div","sub",t));
+    const c=el("div","chips");st.forEach(k=>c.append(chip(STORES[k][0],STORES[k][1](q))));f.append(c)});
+  return f;
+}
+function uniShelf(){
+  const f=document.createDocumentFragment();
+  f.append(el("div","sh","Explorer les univers cyberpunk"));
+  f.append(el("p","note","Les mondes qui ont inspiré (ou prolongé) Cyberpunk 2077. Appuie sur « Actus » pour les dernières nouvelles."));
+  UNIVERSES.forEach(([n,m,d,wiki,news,buy])=>{
+    const c=el("div","uni");c.append(el("div","meta",m),el("h3",null,n),el("p",null,d));
+    const ch=el("div","chips");
+    ch.append(chip("Wikipédia","https://fr.wikipedia.org/w/index.php?search="+plus(wiki)));
+    ch.append(chip("Actus","https://news.google.com/search?q="+plus(news)+"&hl=fr&gl=FR&ceid=FR:fr"));
+    ch.append(chip("Acheter",STORES.amz[1](buy)));
+    c.append(ch);f.append(c)});
+  return f;
+}
 /* articles */
 function draw(){
   const L=$("list");L.innerHTML="";
   let d;
+  const shelf=cat=="dérivés"?shopShelf():cat=="univers"?uniShelf():null;
   if(cat=="fav"){d=favs();$("st").textContent=d.length?"":"Aucun favori pour l'instant. Appuie sur ☆ sur un article pour le garder ici."}
-  else{d=DATA.filter(a=>cat=="tout"||a.cat==cat);$("st").textContent=d.length?"":(DATA.length?"Rien de neuf dans cet onglet pour l'instant.":"")}
+  else{d=DATA.filter(a=>cat=="tout"||a.cat==cat);$("st").textContent=shelf?"":(d.length?"":(DATA.length?"Rien de neuf dans cet onglet pour l'instant.":""))}
+  if(shelf){L.append(shelf,el("div","sh","Actus récentes"));if(!d.length)L.append(el("div","none",DATA.length?"Aucune actu récente dans cet onglet pour l'instant.":"Chargement des actus…"))}
   d.forEach(n=>{
     const card=document.createElement("div");card.className="card";
     const a=document.createElement("a");a.className="lk";a.href=n.link;a.target="_blank";a.rel="noopener";
