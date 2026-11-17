@@ -21,8 +21,11 @@ h1 small{display:block;font-size:11px;color:var(--m);letter-spacing:2px}
 main{padding:12px 12px 12px calc(var(--rail) + 12px)}
 #st:empty{display:none}
 #st{color:var(--m);text-align:center;padding:24px 8px}
-.card{display:flex;gap:10px;background:var(--p);border-left:4px solid var(--y);padding:10px;margin-bottom:10px;text-decoration:none;color:inherit}
+.card{position:relative;background:var(--p);border-left:4px solid var(--y);margin-bottom:10px}
 .card:active{background:#222}
+.lk{display:flex;gap:10px;padding:10px 46px 10px 10px;text-decoration:none;color:inherit}
+.star{position:absolute;top:0;right:0;width:46px;height:46px;background:none;border:0;color:var(--m);font-size:26px;line-height:1;cursor:pointer}
+.star.on{color:var(--y)}
 .th{flex:none;width:76px;height:76px;background:#000;border:1px solid #333;overflow:hidden;position:relative}
 .th img{width:100%;height:100%;object-fit:cover;display:block}
 .th.fb img{filter:saturate(.8) brightness(.85)}
@@ -68,27 +71,45 @@ const API="https://nc-feed.lucasfigeac140702.workers.dev";
 const CHAT=false; // true si tu as ajouté ANTHROPIC_API_KEY au Worker
 const $=id=>document.getElementById(id);
 const ADS=window.ADS||[];
-const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"]];
+const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"],["fav","★ favoris"]];
 const LABEL={"jeu":"Jeu","série":"Série & film","tcg":"TCG & jeux de table","univers":"Univers","dérivés":"Produits dérivés"};
 let cat="tout",DATA=[];
 function hh(){document.documentElement.style.setProperty("--hh",$("hd").offsetHeight+"px")}
 function hash(s){let h=0;for(let i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return Math.abs(h)}
+/* favoris (gardés sur ce téléphone) */
+function favs(){try{const a=JSON.parse(localStorage.getItem("nc_fav")||"[]");return Array.isArray(a)?a:[]}catch(e){return[]}}
+function saveFavs(a){try{localStorage.setItem("nc_fav",JSON.stringify(a))}catch(e){}}
+function isFav(link){return favs().some(f=>f.link==link)}
+function toggleFav(n){
+  let a=favs();
+  if(a.some(f=>f.link==n.link))a=a.filter(f=>f.link!=n.link);
+  else a.unshift({title:n.title,link:n.link,image:n.image||"",date:n.date||"",source:n.source||"",cat:n.cat,saved:Date.now()});
+  saveFavs(a);tabsUI();
+}
 /* onglets */
 function tabsUI(){
-  $("tabs").innerHTML="";
-  TABS.forEach(([k,l])=>{const n=k=="tout"?DATA.length:DATA.filter(a=>a.cat==k).length;
-    const b=document.createElement("button");b.className=k==cat?"on":"";b.textContent=l;
-    if(DATA.length){const c=document.createElement("b");c.textContent=n;b.append(c)}
-    b.onclick=()=>{cat=k;tabsUI();draw()};$("tabs").append(b)});
+  const T=$("tabs");
+  if(!T.children.length)TABS.forEach(([k,l])=>{
+    const b=document.createElement("button");b.dataset.k=k;b.append(document.createTextNode(l));
+    const c=document.createElement("b");b.append(c);
+    b.onclick=()=>{cat=k;tabsUI();draw()};T.append(b)});
+  const F=favs();
+  [...T.children].forEach(b=>{
+    const k=b.dataset.k;b.className=k==cat?"on":"";
+    const n=k=="tout"?DATA.length:k=="fav"?F.length:DATA.filter(a=>a.cat==k).length;
+    b.lastChild.textContent=(DATA.length||k=="fav")&&n?n:"";
+  });
   hh();
 }
 /* articles */
 function draw(){
   const L=$("list");L.innerHTML="";
-  const d=DATA.filter(a=>cat=="tout"||a.cat==cat);
-  $("st").textContent=d.length?"":(DATA.length?"Rien de neuf dans cet onglet pour l'instant.":"");
+  let d;
+  if(cat=="fav"){d=favs();$("st").textContent=d.length?"":"Aucun favori pour l'instant. Appuie sur ☆ sur un article pour le garder ici."}
+  else{d=DATA.filter(a=>cat=="tout"||a.cat==cat);$("st").textContent=d.length?"":(DATA.length?"Rien de neuf dans cet onglet pour l'instant.":"")}
   d.forEach(n=>{
-    const a=document.createElement("a");a.className="card";a.href=n.link;a.target="_blank";a.rel="noopener";
+    const card=document.createElement("div");card.className="card";
+    const a=document.createElement("a");a.className="lk";a.href=n.link;a.target="_blank";a.rel="noopener";
     const th=document.createElement("div");th.className="th";
     const im=document.createElement("img");im.alt="";im.loading="lazy";im.referrerPolicy="no-referrer";
     const fb=()=>{if(ADS.length){th.classList.add("fb");im.src=ADS[hash(n.link)%ADS.length].s}};
@@ -100,23 +121,41 @@ function draw(){
     const m=document.createElement("div");m.className="meta";
     m.textContent=(n.source||"")+(n.date?" · "+new Date(n.date).toLocaleString("fr-FR",{dateStyle:"short",timeStyle:"short"}):"");
     const g=document.createElement("span");g.className="go";g.textContent="ACCÉDER ▸";
-    bd.append(tg,h,m,g);a.append(th,bd);L.append(a);
+    bd.append(tg,h,m,g);a.append(th,bd);
+    const s=document.createElement("button");s.className="star";s.setAttribute("aria-label","Favori");
+    const paint=()=>{const on=isFav(n.link);s.textContent=on?"★":"☆";s.classList.toggle("on",on)};paint();
+    s.onclick=e=>{e.preventDefault();e.stopPropagation();toggleFav(n);if(cat=="fav")draw();else paint()};
+    card.append(a,s);L.append(card);
   });
 }
-async function load(){
-  try{
-    const r=await fetch(API+"/news",{cache:"no-cache"});if(!r.ok)throw new Error("HTTP "+r.status);
-    const d=await r.json();if(!Array.isArray(d))throw new Error("Réponse inattendue");
-    DATA=d;try{localStorage.setItem("nc_data2",JSON.stringify(d))}catch(e){}
-    $("st").textContent="";tabsUI();draw();
-    if(!d.length)$("st").textContent="Aucune actu Cyberpunk 2077 trouvée pour l'instant. Repasse dans quelques minutes.";
-  }catch(e){
-    if(DATA.length){return}
-    $("st").textContent="Signal perdu : "+(e&&e.message?e.message:e)+" | API = "+API;
-  }
+/* chargement : 4 groupes de sources, affichés au fur et à mesure */
+function norm(t){return(t||"").toLowerCase().replace(/[^a-z0-9]/g,"")}
+function dedupe(arr){
+  const sl=new Set(),st=new Set();
+  return arr.sort((a,b)=>new Date(b.date||0)-new Date(a.date||0)).filter(a=>{
+    const k=norm(a.orig||a.title);if(sl.has(a.link)||st.has(k))return false;sl.add(a.link);st.add(k);return true}).slice(0,250);
 }
-try{const c=JSON.parse(localStorage.getItem("nc_data2")||"[]");if(Array.isArray(c)&&c.length){DATA=c;tabsUI();draw()}}catch(e){}
-tabsUI();load();setInterval(load,600000);
+let loading=false;
+async function getPart(i){
+  const r=await fetch(API+"/news?part="+i,{cache:"no-cache"});if(!r.ok)throw new Error("HTTP "+r.status);
+  const d=await r.json();const items=Array.isArray(d)?d:d.items;if(!Array.isArray(items))throw new Error("Réponse inattendue");
+  return{items,parts:Array.isArray(d)?1:(d.parts||1)};
+}
+async function load(){
+  if(loading)return;loading=true;
+  const OLD=DATA,fresh=[];let done=0,total=4,err="";
+  const upd=()=>{DATA=dedupe(fresh.concat(OLD));tabsUI();draw();
+    if(!DATA.length)$("st").textContent=done<total?"Chargement des sources… "+done+"/"+total:"Aucune actu Cyberpunk 2077 trouvée pour l'instant."};
+  try{
+    try{const f=await getPart(0);total=f.parts;fresh.push(...f.items)}catch(e){err=e&&e.message?e.message:String(e)}
+    done=1;upd();
+    await Promise.all(Array.from({length:Math.max(0,total-1)},(_,k)=>getPart(k+1).then(p=>{fresh.push(...p.items)}).catch(e=>{err=err||(e&&e.message?e.message:String(e))}).then(()=>{done++;upd()})));
+    if(fresh.length){DATA=dedupe(fresh.slice());tabsUI();draw();try{localStorage.setItem("nc_data3",JSON.stringify(DATA))}catch(e){}}
+    else if(!OLD.length)$("st").textContent="Signal perdu : "+(err||"aucune réponse")+" | API = "+API;
+  }finally{loading=false}
+}
+try{const c=JSON.parse(localStorage.getItem("nc_data3")||"[]");if(Array.isArray(c)&&c.length){DATA=c}}catch(e){}
+tabsUI();draw();load();setInterval(load,600000);
 /* pubs défilantes (affiches) */
 (function(){
   if(!ADS.length){$("rail").style.display="none";document.querySelector("main").style.paddingLeft="12px";return}
