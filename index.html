@@ -13,6 +13,11 @@ header{position:sticky;top:0;z-index:6;background:var(--bg);border-bottom:2px so
 .top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 h1{margin:0;font-size:22px;letter-spacing:3px;color:var(--y);text-transform:uppercase}
 h1 small{display:block;font-size:11px;color:var(--m);letter-spacing:2px}
+#ad{background:none;border:1px solid var(--m);color:var(--t);height:34px;padding:0 8px;font:700 11px inherit;letter-spacing:1px}
+#ad.off{color:var(--m);text-decoration:line-through}
+body.noad #rail{display:none}
+body.noad main{padding-left:12px}
+body.noad{--rail:0px}
 #sb,#fv{background:none;border:1px solid var(--m);color:var(--t);width:38px;height:34px;display:flex;align-items:center;justify-content:center}
 #sb.on,#fv.on{background:var(--y);color:#000;border-color:var(--y)}
 #fv{font-size:20px;color:var(--y)}#fv.on{color:#000}
@@ -211,7 +216,7 @@ details.rule li{margin-bottom:4px}
 </style></head><body>
 <header id="hd">
  <div class="top"><h1>Night City Feed<small>// CYBERPUNK 2077 · EN DIRECT</small></h1>
-  <div style="display:flex;gap:6px"><button id="fv" aria-label="Favoris">☆</button><button id="sb" aria-label="Rechercher"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg></button></div></div>
+  <div style="display:flex;gap:6px"><button id="ad" aria-label="Masquer les pubs">PUB</button><button id="fv" aria-label="Favoris">☆</button><button id="sb" aria-label="Rechercher"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="10" cy="10" r="6.5"/><path d="M15 15l6 6"/></svg></button></div></div>
  <div id="sr" hidden><input id="q" type="search" placeholder="Rechercher dans cet onglet…" autocomplete="off"></div>
  <div class="tabs" id="tabs"></div>
 </header>
@@ -519,7 +524,12 @@ function cardCtl(c){
   const refresh=()=>{if(cat=="tc")renderCards();else if(cat=="td")draw()};
   x.append(stepper("Collection",()=>OWN[c.n]||0,v=>{v?OWN[c.n]=v:delete OWN[c.n];saveOwn()},9,refresh));
   const lg=c.t=="l";
+  const q="Cyberpunk TCG "+baseName(c.name)+(c.r=="i"?" iconic":"");
+  const ch=el("div","chips");ch.style.justifyContent="center";
+  [["eBay","https://www.ebay.fr/sch/i.html?_nkw="+plus(q)],["Vinted","https://www.vinted.fr/catalog?search_text="+plus(q)],["Leboncoin","https://www.leboncoin.fr/recherche?text="+plus(q)],["Google Shopping","https://www.google.com/search?tbm=shop&q="+plus(q)]].forEach(([n,u])=>ch.append(chip(n,u)));
+  const lab=el("div","meta","Trouver / comparer le prix");lab.style.textAlign="center";
   x.append(stepper("Deck",()=>DECK[c.n]||0,v=>{v?DECK[c.n]=v:delete DECK[c.n];saveDeck()},lg?1:3,refresh));
+  x.append(lab,ch);
 }
 function cardTile(c){
   const b=el("button","cd");b.setAttribute("aria-label",c.name);
@@ -751,6 +761,9 @@ async function load(){
 }
 const cached=ls("nc_data3",[]);if(Array.isArray(cached)&&cached.length)DATA=cached;
 /* recherche */
+function setAd(off){document.body.classList.toggle("noad",off);$("ad").classList.toggle("off",off);$("ad").setAttribute("aria-pressed",off);lset("nc_noad",off)}
+$("ad").onclick=()=>setAd(!document.body.classList.contains("noad"));
+setAd(!!ls("nc_noad",false));
 $("sb").onclick=()=>{const o=$("sr").hidden;$("sr").hidden=!o;$("sb").classList.toggle("on",o);if(o)$("q").focus();else{Q="";$("q").value="";draw()}hh()};
 $("q").oninput=e=>{Q=e.target.value.trim().toLowerCase();draw()};
 tabsUI();draw();load();loadVids();loadStats();loadTwitch();
