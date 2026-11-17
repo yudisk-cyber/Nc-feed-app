@@ -267,8 +267,8 @@ async function share(n){
   try{await navigator.clipboard.writeText(n.link);toast("Lien copié")}catch(e){prompt("Copie le lien :",n.link)}
 }
 /* onglets */
-function go(k){
-  if(SEC[k])k=LAST[k];
+function go(k,nav){
+  if(nav&&SEC[k])k=LAST[k];
   if(cat==k)return;
   cat=k;const s=secOf(k);if(LAST[s]!==undefined)LAST[s]=k;
   Q="";$("q").value="";tabsUI();draw();glitch();scrollTo(0,0);
@@ -279,7 +279,7 @@ function glitch(){const L=$("list");L.classList.remove("gl");void L.offsetWidth;
 function tabsUI(){
   const T=$("tabs"),sec=secOf(cat),sub=SEC[sec];
   if(!$("nav").children.length){
-    NAV.forEach(([k,ic,l])=>{const b=el("button",null);b.dataset.k=k;b.append(el("i",null,ic),document.createTextNode(l),el("b"));b.onclick=()=>go(k);$("nav").append(b)});
+    NAV.forEach(([k,ic,l])=>{const b=el("button",null);b.dataset.k=k;b.append(el("i",null,ic),document.createTextNode(l),el("b"));b.onclick=()=>go(k,true);$("nav").append(b)});
     $("fv").onclick=()=>go(cat=="fav"?LAST.actus:"fav");
   }
   const key=sec+"|"+(sub?"1":"0");
