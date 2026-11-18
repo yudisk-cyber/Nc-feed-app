@@ -239,6 +239,43 @@ body.bd h1{animation:fl 5s infinite}
 .ht:active{background:#222}
 .bk{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;border-bottom:1px solid #333;color:var(--c);font:inherit;padding:2px 0 8px;margin-bottom:10px;text-align:left;letter-spacing:1px}
 .bk b{color:var(--y);text-transform:uppercase;font-size:14px}
+
+/* simulateur */
+.pkw{display:flex;flex-direction:column;align-items:center;gap:12px;padding:6px 0 14px}
+.pack{position:relative;width:180px;height:280px;background:linear-gradient(160deg,#fcee0a,#b8ab00 45%,#241e00);border:2px solid #fff3;box-shadow:0 0 24px rgba(252,238,10,.35);cursor:pointer;overflow:hidden;color:#000;display:flex;flex-direction:column;align-items:center}
+.ptop,.pbot{position:absolute;left:0;right:0;height:22px;background:repeating-linear-gradient(90deg,#0008 0 3px,transparent 3px 7px)}
+.ptop{top:0}.pbot{bottom:0}
+.pbody{margin-top:44px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px}
+.pbody b{font-size:21px;letter-spacing:2px;font-weight:900}
+.pbody em{font-style:normal;font-size:44px;line-height:.9;font-weight:900;color:#ff2a55;text-shadow:2px 2px 0 #000}
+.pbody span{font-size:9px;letter-spacing:1px;font-weight:700;margin:4px 0 8px}
+.pbody small{font-size:9px;letter-spacing:1px;margin-top:8px;font-weight:700}
+.sheen{position:absolute;inset:0;background:linear-gradient(110deg,transparent 40%,rgba(255,255,255,.55) 50%,transparent 60%);transform:translateX(-120%);animation:sh 3.2s infinite}
+@keyframes sh{to{transform:translateX(120%)}}
+.pack.tear{animation:pshake .6s linear,pburst .5s .9s forwards}
+.pack.tear .ptop{animation:ptear .5s .6s forwards}
+@keyframes pshake{0%,100%{transform:none}15%{transform:translate(-5px,2px) rotate(-3deg)}35%{transform:translate(6px,-2px) rotate(3deg)}55%{transform:translate(-6px,3px) rotate(-4deg)}75%{transform:translate(5px,-3px) rotate(3deg)}}
+@keyframes ptear{to{transform:translate(-40px,-90px) rotate(-35deg);opacity:0}}
+@keyframes pburst{0%{filter:brightness(1);transform:scale(1)}60%{filter:brightness(4);transform:scale(1.12)}100%{filter:brightness(8);transform:scale(1.25);opacity:0}}
+.cx{perspective:1000px;width:min(56vw,250px);aspect-ratio:5/7;cursor:pointer;position:relative}
+.cx.enter{animation:cin .35s ease-out}
+@keyframes cin{from{transform:translateX(60px) scale(.9);opacity:0}to{transform:none;opacity:1}}
+.cx .in{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.8,.2,1)}
+.cx.fl .in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border:2px solid #444;background:#000;overflow:hidden}
+.face.front{transform:rotateY(180deg)}
+.face.back{background:radial-gradient(circle at 50% 40%,#2a2500,#050505 70%);display:flex;align-items:center;justify-content:center;border-color:var(--y)}
+.bk1{text-align:center;color:var(--y)}.bk1 b{display:block;font-size:22px;letter-spacing:4px}.bk1 em{font-style:normal;display:block;font-size:46px;font-weight:900;color:#ff2a55}
+.cx.fl .face.front{border-color:var(--g);box-shadow:0 0 26px 5px var(--g)}
+.cx.r-i.fl .face.front{animation:rb 2.4s linear infinite}
+@keyframes rb{to{filter:hue-rotate(360deg)}}
+.cx.burst::after{content:"";position:absolute;left:50%;top:50%;width:20px;height:20px;margin:-10px;border-radius:50%;background:var(--g);animation:bst .8s ease-out forwards;pointer-events:none;z-index:3}
+@keyframes bst{from{transform:scale(1);opacity:.9}to{transform:scale(26);opacity:0}}
+.pinfo{text-align:center;display:flex;flex-direction:column;align-items:center;gap:4px;min-height:60px}
+.pinfo h3{margin:0;font-size:16px}.pinfo .tag{padding:1px 8px}
+.pkg{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;width:100%}
+@media(min-width:620px){.pkg{grid-template-columns:repeat(5,1fr)}}
+@media(prefers-reduced-motion:reduce){.pack.tear,.pack.tear .ptop,.cx.enter,.sheen,.cx.burst::after{animation:none}.cx .in{transition:none}}
 </style></head><body>
 <header id="hd">
  <div class="top"><h1>Night City Feed<small>// CYBERPUNK 2077 · EN DIRECT</small></h1>
@@ -263,7 +300,7 @@ const $=id=>document.getElementById(id);
 const ADS=window.ADS||[];
 const TABS=[["tout","tout"],["jeu","jeu"],["série","série"],["tcg","tcg"],["univers","univers"],["dérivés","dérivés"]];
 const NEWSCATS=["tout","jeu","série","tcg","univers","dérivés"];
-const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"]],plus:[["hub","Plus"],["cal","Sorties"],["tl","Chronologie"],["quiz","Quiz"],["wk","Wiki"],["lx","Lexique"],["gd","Guides"],["wp","Fonds"],["pr","Progrès"],["bd","Braindance"]]};
+const SEC={actus:NEWSCATS.map(k=>[k,k]),tcg:[["tr","Règles"],["tc","Cartes"],["td","Deck"],["tp","Paquets"]],plus:[["hub","Plus"],["cal","Sorties"],["tl","Chronologie"],["quiz","Quiz"],["wk","Wiki"],["lx","Lexique"],["gd","Guides"],["wp","Fonds"],["pr","Progrès"],["bd","Braindance"]]};
 const NAV=[["actus","▤","Actus"],["vid","▶","Vidéos"],["live","●","Live"],["tcg","◈","TCG"],["plus","⋯","Plus"]];
 const LAST={actus:"tout",tcg:"tr",plus:"hub"};
 function secOf(c){for(const s in SEC)if(SEC[s].some(x=>x[0]==c))return s;return c}
@@ -747,6 +784,131 @@ function drawTL(L){
   L.append(fr,box);fill();
 }
 
+/* simulateur de paquets */
+const SIM=Object.assign({c:{},n:0},ls("nc_sim",{}));
+const saveSim=()=>lset("nc_sim",SIM);
+const RGLOW={c:"#555",u:"#2bd96b",r:"#2f9bff",e:"#b84dff",s:"#ffb000",i:"#ff2a8a"};
+function rnd(n){try{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}catch(e){return Math.floor(Math.random()*n)}}
+function pickR(w){const t=w.reduce((s,x)=>s+x[1],0);let r=rnd(t*100)/100;for(const x of w){r-=x[1];if(r<0)return x[0]}return w[0][0]}
+function makePack(){
+  const RP=[["r",82.64],["e",12.5],["i",2.78],["s",2.08]]; // 2 emplacements « Rare+ » : ~1 épique / 4 paquets, ~1 iconique / 18, ~1 secrète / 24
+  const slots=["c","c","c","c","c","c","c","u","u","u",pickR(RP),pickR(RP)];
+  const out=[],seen=new Set();
+  slots.forEach(r=>{const p=CARDS.filter(c=>c.r==r);let c,t=0;do{c=p[rnd(p.length)]}while(seen.has(c.n)&&++t<8);seen.add(c.n);out.push(c)});
+  return out.sort((a,b)=>RORD.indexOf(a.r)-RORD.indexOf(b.r));
+}
+function openOne(){
+  const cards=makePack().map(c=>({c,isNew:!SIM.c[c.n]}));
+  cards.forEach(x=>{SIM.c[x.c.n]=(SIM.c[x.c.n]||0)+1});
+  SIM.n++;saveSim();return cards;
+}
+function cardImgEl(c,full){
+  const w=el("div");w.style.cssText="position:absolute;inset:0";
+  const ph=el("div","ph",c.name);ph.style.cssText="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;font-weight:700;background:#111;color:"+COL[c.c][1];
+  const im=el("img");im.alt=c.name;im.decoding="async";im.style.cssText="position:absolute;inset:0;width:100%;height:100%;object-fit:cover";
+  let t=0;im.onload=()=>ph.remove();im.onerror=()=>{if(!t++)im.src=CIMG+"wnc-"+c.n+".webp";else im.remove()};
+  im.src=CIMG+"large/wnc-"+c.n+".webp";w.append(ph,im);return w;
+}
+function preload(cards){
+  return Promise.race([Promise.all(cards.map(x=>new Promise(r=>{const i=new Image();i.onload=i.onerror=r;i.src=CIMG+"large/wnc-"+x.c.n+".webp"}))),new Promise(r=>setTimeout(r,2800))]);
+}
+function simTile(c,n,isNew){
+  const b=el("button","cd");b.setAttribute("aria-label",c.name);
+  b.append(cardImgEl(c));
+  const bar=el("div","bar");bar.style.background=RGLOW[c.r];b.append(bar,el("span","no",c.n));
+  if(n>1)b.append(el("span","ow","×"+n));
+  if(isNew)b.append(el("span","dk","NEW"));
+  if(n===0)b.classList.add("miss");
+  b.onclick=()=>{$("lbx").innerHTML="";$("lbi").src=CIMG+"large/wnc-"+c.n+".webp";$("lbi").onerror=()=>{$("lbi").onerror=null;$("lbi").src=CIMG+"wnc-"+c.n+".webp"};
+    $("lbn").textContent=c.name;$("lbt").textContent=COL[c.c][0]+" · "+RAR[c.r]+" · "+TYP[c.t];$("lbs").textContent="N° "+c.n+(n?" · ×"+n:" · pas encore obtenue");$("lb").classList.add("open")};
+  return b;
+}
+const PK={stage:"idle",cards:[],i:0,multi:false,view:"all"};
+function packArt(){
+  const p=el("div","pack");
+  p.innerHTML='<div class="ptop"></div><div class="pbody"><b>CYBERPUNK</b><em>TCG</em><span>WELCOME TO NIGHT CITY</span><svg viewBox="0 0 100 60" width="90"><g fill="none" stroke="#000" stroke-width="3"><polygon points="50,5 70,16 70,38 50,49 30,38 30,16"/><polygon points="22,32 34,39 34,52 22,59 10,52 10,39" /><polygon points="78,32 90,39 90,52 78,59 66,52 66,39"/></g></svg><small>12 CARTES · SIMULATEUR</small></div><div class="pbot"></div><div class="sheen"></div>';
+  return p;
+}
+function drawPacks(L){
+  $("st").textContent="";
+  if(PK.stage=="opening")PK.stage="idle";
+  const box=el("div");box.id="pk";L.append(box);
+  const stats=el("div");stats.id="pks";L.append(stats);
+  renderPK();
+}
+function simStats(){
+  const s=$("pks");if(!s)return;s.innerHTML="";
+  const u=Object.keys(SIM.c).length,tot=Object.values(SIM.c).reduce((a,b)=>a+b,0);
+  const hit=k=>CARDS.filter(c=>c.r==k&&SIM.c[c.n]).length;
+  const p=el("div","panel");
+  p.append(el("div","lab","Ma collection du simulateur"),el("div","big",u+" / "+CARDS.length));
+  const pr=el("div","prog"),pi=el("i");pi.style.width=(u/CARDS.length*100)+"%";pr.append(pi);p.append(pr);
+  p.append(el("div","meta",SIM.n+" paquet"+(SIM.n>1?"s":"")+" ouvert"+(SIM.n>1?"s":"")+" · "+tot+" cartes · "+(tot-u)+" doublons · "+hit("e")+" épiques · "+hit("s")+" secrètes · "+hit("i")+" iconiques"));
+  const bt=el("div","btnrow");
+  const v=el("button","btn2","Voir ma collection");v.onclick=()=>{PK.stage="col";renderPK()};
+  const rs=el("button","btn2","Réinitialiser");rs.onclick=()=>{if(confirm("Effacer toute la collection du simulateur ?")){SIM.c={};SIM.n=0;saveSim();PK.stage="idle";renderPK()}};
+  bt.append(v,rs);p.append(bt);s.append(p);
+  s.append(el("p","note","Simulation indépendante de ta vraie collection. Structure officielle : 12 cartes par paquet, soit 7 communes, 3 peu communes et 2 emplacements « Rare+ ». Taux approximatifs annoncés : une épique tous les ~4 paquets, une iconique tous les ~18, une secrète tous les ~24. Le choix exact de la carte au sein d'une rareté est aléatoire dans l'appli."));
+}
+function renderPK(){
+  const box=$("pk");if(!box)return;box.innerHTML="";box.className="pkw";simStats();
+  if(PK.stage=="idle"){
+    const pk=packArt();pk.onclick=()=>startOpen(false);box.append(pk);
+    const b=el("button","btn","Ouvrir un paquet");b.onclick=()=>startOpen(false);
+    const b6=el("button","btn2","Ouvrir 6 paquets d'un coup");b6.onclick=()=>startOpen(true);
+    box.append(b,b6);
+  }else if(PK.stage=="opening"){
+    const pk=packArt();pk.classList.add("tear");box.append(pk);box.append(el("p","note","Ouverture…"));
+  }else if(PK.stage=="reveal"){
+    const x=PK.cards[PK.i],c=x.c;
+    box.append(el("div","meta","Carte "+(PK.i+1)+" / "+PK.cards.length));
+    const cx=el("div","cx enter r-"+c.r);cx.style.setProperty("--g",RGLOW[c.r]);
+    const inn=el("div","in"),back=el("div","face back"),front=el("div","face front");
+    back.innerHTML='<div class="bk1"><b>CYBERPUNK</b><em>TCG</em></div>';
+    front.append(cardImgEl(c));inn.append(back,front);cx.append(inn);box.append(cx);
+    const info=el("div","pinfo");info.style.visibility="hidden";
+    const tg=el("span","tag",RAR[c.r]);tg.style.background=RGLOW[c.r];tg.style.color=(c.r=="c"||c.r=="e"||c.r=="i")?"#fff":"#000";
+    info.append(tg,el("h3",null,c.name));
+    if(x.isNew){const n=el("span","tag new","Nouveau");info.append(n)}
+    box.append(info);
+    const hint=el("div","note",PK.fl?"Touche pour la suivante":"Touche la carte pour la retourner");hint.id="hint";box.append(hint);
+    let flipped=false;
+    cx.onclick=()=>{
+      if(!flipped){flipped=true;cx.classList.add("fl");info.style.visibility="visible";hint.textContent=PK.i+1>=PK.cards.length?"Touche pour voir le résumé":"Touche pour la suivante";
+        if("eis".includes(c.r)){cx.classList.add("burst");try{navigator.vibrate&&navigator.vibrate(c.r=="e"?60:[80,40,120])}catch(e){}}
+      }else{PK.i++;if(PK.i>=PK.cards.length)PK.stage="sum";renderPK()}
+    };
+    const sk=el("button","btn2","Passer ▸▸");sk.onclick=()=>{PK.stage="sum";renderPK()};box.append(sk);
+  }else if(PK.stage=="sum"){
+    box.append(el("div","sh","Résumé"));
+    const g=el("div","pkg");PK.cards.forEach(x=>g.append(simTile(x.c,SIM.c[x.c.n],x.isNew)));box.append(g);
+    const best=PK.cards.slice().sort((a,b)=>RORD.indexOf(b.c.r)-RORD.indexOf(a.c.r))[0];
+    box.append(el("div","meta","Meilleure carte : "+best.c.name+" ("+RAR[best.c.r]+")"+" · nouvelles cartes : "+PK.cards.filter(x=>x.isNew).length));
+    const b=el("button","btn","Ouvrir un autre paquet");b.onclick=()=>{PK.stage="idle";renderPK();startOpen(false)};
+    const b2=el("button","btn2","Retour");b2.onclick=()=>{PK.stage="idle";renderPK()};box.append(b,b2);
+  }else if(PK.stage=="col"){
+    const fr=el("div","chips");[["all","Toutes"],["own","Obtenues"],["miss","Manquantes"]].forEach(([k,t])=>{const b=el("button","fc"+(PK.view==k?" on":""),t);b.onclick=()=>{PK.view=k;renderPK()};fr.append(b)});
+    const bk=el("button","btn2","‹ Retour aux paquets");bk.onclick=()=>{PK.stage="idle";renderPK()};
+    box.append(bk,fr);
+    const g=el("div","pkg");
+    CARDS.slice().sort(cmpBy("num")).filter(c=>PK.view=="all"||(PK.view=="own"?SIM.c[c.n]:!SIM.c[c.n])).forEach(c=>g.append(simTile(c,SIM.c[c.n]||0,false)));
+    box.append(g);
+  }
+}
+async function startOpen(multi){
+  if(PK.stage=="opening")return;
+  if(multi){
+    const all=[];for(let k=0;k<6;k++)openOne().forEach(x=>all.push(x));
+    // une carte nouvelle n'est « nouvelle » qu'une fois
+    const seen=new Set();all.forEach(x=>{if(x.isNew){if(seen.has(x.c.n))x.isNew=false;else seen.add(x.c.n)}});
+    all.sort((a,b)=>RORD.indexOf(b.c.r)-RORD.indexOf(a.c.r)||cmpBy("num")(a.c,b.c));
+    PK.cards=all;PK.stage="sum";renderPK();return;
+  }
+  PK.cards=openOne();PK.i=0;PK.fl=false;PK.stage="opening";renderPK();
+  const t0=Date.now();await preload(PK.cards);
+  const wait=Math.max(0,1500-(Date.now()-t0));setTimeout(()=>{if(PK.stage=="opening"){PK.stage="reveal";if(cat=="tp")renderPK()}},wait);
+}
+
 /* TCG : règles + liste des cartes */
 const RULES=[
  ["But du jeu",`<p>Tu gagnes si tu commences ton tour avec <b>7 Gigs</b> (dés) dans ta zone de Gigs. Tu ne gagnes pas à l'instant où tu prends le 7ᵉ : il faut le garder jusqu'au début de ton tour suivant.</p><p>Tu perds si tu dois piocher et que ton deck est vide.</p>`],
@@ -979,6 +1141,7 @@ function draw(){
   if(cat=="tr")return drawRules(L);
   if(cat=="tc")return drawCards(L);
   if(cat=="td")return drawDeck(L);
+  if(cat=="tp")return drawPacks(L);
   if(cat=="wk")return drawWiki(L);
   if(cat=="lx")return drawLex(L);
   if(cat=="gd")return drawGuides(L);
